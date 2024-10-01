@@ -20,3 +20,10 @@
     color: black;
     border-color: black;
 }
+#footer{
+    width: 100%;
+    height: 20%;
+    background-color: lightgrey;
+    position: fixed;
+    bottom: 0px;
+}
