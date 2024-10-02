@@ -15,7 +15,7 @@ function createTable() {
         dove.innerHTML = 
             `<h3>${nametable}</h3>
             
-            <div  class="input-group mb-3">
+            <div class="input-group mb-3">
 
                 <input type="text" class="form-control tascaB" placeholder="Tasca" id="nameB-${table.length-1}">
 
@@ -32,7 +32,7 @@ function createTable() {
                         <th scope="col">Accions</th>
                     </tr>
                 </thead>
-                <tbody class="taskA">
+                <tbody id="taskA-${table.length-1}">
                     
                 </tbody>
             </table>`
@@ -51,19 +51,36 @@ function createTask(tp) {
     const nametask = document.getElementById(`nameB-${tp}`).value.trim();
     if (nametask) {
         let taskB = {
-            task: nametask
+            name: nametask
         };
 
     table[tp].task.push(taskB);
     let dit = document.createElement("tr");
+        dit.setAttribute("id", `td-${table.length-1}-${table[tp].task.length-1}`);
 
     dit.innerHTML = 
-        `<td>${nametask}</td>`
+        `<td>${nametask}</td>
+        
+        <td>
 
-    document.getElementById("table").appendChild(dit);
+            <button type="button" class="btn btn-danger" 
+            onclick="createEliminate(${tp},${table[tp].task.length-1})">Eliminar
+            </button>
+        
+        </td>`
+
+        document.getElementById(`taskA-${tp}`).appendChild(dit);
+
     }
 
     else {
         alert("Intrudueix un nombre valid per la tasca");
     }
+}
+
+function createEliminate(tp,tb) {
+
+    const sda= document.getElementById(`td-${tp}-${tb}`);
+    table[tp].task.splice(tb, 1);
+    sda.remove();
 }
