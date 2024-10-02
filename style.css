@@ -11,7 +11,7 @@
     height: 10%;
 }
 .sessio:disabled, button[disabled]{
-    position: fixed;
+    position: absolute;
     right: 10px;
     top: 10px;
     width: 7%;
@@ -24,6 +24,6 @@
     width: 100%;
     height: 20%;
     background-color: lightgrey;
-    position: fixed;
-    bottom: 0px;
+    margin-top: 25%;
+    
 }
