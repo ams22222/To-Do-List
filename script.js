@@ -11,6 +11,7 @@ function createTable() {
         table.push(tableA);
         let dove = document.createElement("div");
         dove.classList.add("col-md-4");
+        dove.classList.add("border");
         dove.innerHTML = 
             `<h3>${nametable}</h3>
             
