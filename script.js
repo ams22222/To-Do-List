@@ -14,7 +14,7 @@ function createTable() {
         dove.innerHTML = 
             `<h3>${nametable}</h3>
             
-            <div  class="input-group mb-3">
+            <div class="input-group mb-3">
 
                 <input type="text" class="form-control tascaB" placeholder="Tasca" id="nameB-${table.length-1}">
 
@@ -31,7 +31,7 @@ function createTable() {
                         <th scope="col">Accions</th>
                     </tr>
                 </thead>
-                <tbody class="taskA">
+                <tbody id="taskA-${table.length-1}">
                     
                 </tbody>
             </table>`
@@ -57,12 +57,25 @@ function createTask(tp) {
     let dit = document.createElement("tr");
 
     dit.innerHTML = 
-        `<td>${nametask}</td>`
+        `<td>${nametask}</td>
+        
+        <td>
 
-    document.getElementById("table").appendChild(dit);
+            <button type="button" class="btn btn-danger"
+            onclick="createEliminate()">Eliminar
+            </button>
+        
+        </td>`
+
+        document.getElementById(`taskA-${tp}`).appendChild(dit);
+
     }
 
     else {
         alert("Intrudueix un nombre valid per la tasca");
     }
+}
+
+function createEliminate() {
+    
 }
