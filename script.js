@@ -50,19 +50,20 @@ function createTask(tp) {
     const nametask = document.getElementById(`nameB-${tp}`).value.trim();
     if (nametask) {
         let taskB = {
-            task: nametask
+            name: nametask
         };
 
     table[tp].task.push(taskB);
     let dit = document.createElement("tr");
+        dit.setAttribute("id", "td-${table.length-1}-${table[tp].task.length-1}")
 
     dit.innerHTML = 
         `<td>${nametask}</td>
         
         <td>
 
-            <button type="button" class="btn btn-danger"
-            onclick="createEliminate()">Eliminar
+            <button type="button" class="btn btn-danger" 
+            onclick="createEliminate(${tp},${table[tp].task.length-1})">Eliminar
             </button>
         
         </td>`
@@ -76,6 +77,10 @@ function createTask(tp) {
     }
 }
 
-function createEliminate() {
+function createEliminate(tp,tb) {
+
+    const sda= document.getElementById(`td-${tp}-${tb}`);
+    console.log(sda);
     
+    //table[tp].task.splice(tb, 1);
 }
