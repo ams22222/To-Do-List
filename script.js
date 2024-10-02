@@ -56,7 +56,7 @@ function createTask(tp) {
 
     table[tp].task.push(taskB);
     let dit = document.createElement("tr");
-        dit.setAttribute("id", `td-${table.length-1}-${table[tp].task.length-1}`);
+        dit.setAttribute("id", `td-${tp}-${table[tp].task.length-1}`);
 
     dit.innerHTML = 
         `<td>${nametask}</td>
@@ -81,6 +81,9 @@ function createTask(tp) {
 function createEliminate(tp,tb) {
 
     const sda= document.getElementById(`td-${tp}-${tb}`);
-    table[tp].task.splice(tb, 1);
-    sda.remove();
+    if(sda){
+        table[tp].task.splice(tb, 1);
+        sda.remove();
+    }
+  
 }
