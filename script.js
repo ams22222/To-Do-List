@@ -16,11 +16,12 @@ function comença(){
         document.getElementById("nameA").value = nameList + "";
     }
 }   
+
 function createTable() {
     const nametable = document.getElementById("nameA").value.trim();
     if (nametable) {
         let tableA = {
-            id: tableIdCounter++,
+            id: taskIdCounter++,
             name: nametable,
             task: []
         };
@@ -53,8 +54,7 @@ function createTable() {
     } else {
         alert("Intrudueix un nombre valid per la taula");
     }
-}
-
+}   
 function createTask(tableId) {
     const nametask = document.getElementById(`nameB-${tableId}`).value.trim();
     const tableA = table.find(t => t.id === tableId);
@@ -72,6 +72,8 @@ function createTask(tableId) {
             <td>${nametask}</td>
             <td>
                 <button type="button" class="btn btn-danger" onclick="createEliminate(${tableId}, ${taskB.id})">Eliminar</button>
+                <button type="button" class="btn btn-primary" onclick="modal(${tableId}, ${taskB.id})">Editar</button>
+            
             </td>`;
 
         document.getElementById(`taskA-${tableId}`).appendChild(dit);
@@ -104,3 +106,28 @@ function eliminateTable(tableId) {
     }
 }
 
+
+function modal(tableId, taskId){
+    const tableA = table.find(t => t.id === tableId);
+    const taskElement = document.getElementById(`td-${tableId}-${taskId}`);
+    let dove = document.createElement("div");
+    dove.classList.add("modal");
+    dove.innerHTML =`
+        <div class="modal" tabindex="-1"></div>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">tasca</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Modal body text gos here</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primari">Saves changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>`
+}
