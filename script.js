@@ -1,6 +1,21 @@
 let table = [];
 let tableIdCounter = 0;
 let taskIdCounter = 0;
+let sessi_on = 0;
+comença();
+// document.getElementById("nameA").innerText
+function comença(){
+    if(sessi_on == 0){
+        let nameList = document.getElementById("nameA").value;
+        document.getElementById("nameA").value = nameList + "Per fer";
+        createTable();
+        document.getElementById("nameA").value = nameList + "Fent-se";
+        createTable();
+        document.getElementById("nameA").value = nameList + "Fet";
+        createTable();
+        document.getElementById("nameA").value = nameList + "";
+    }
+}   
 function createTable() {
     const nametable = document.getElementById("nameA").value.trim();
     if (nametable) {
