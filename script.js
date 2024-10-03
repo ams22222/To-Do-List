@@ -7,11 +7,11 @@ comença();
 function comença(){
     if(sessi_on == 0){
         let nameList = document.getElementById("nameA").value;
-        document.getElementById("nameA").value = nameList + "Per fer";
+        document.getElementById("nameA").value = nameList + "Pendents";
         createTable();
-        document.getElementById("nameA").value = nameList + "Fent-se";
+        document.getElementById("nameA").value = nameList + "En producció";
         createTable();
-        document.getElementById("nameA").value = nameList + "Fet";
+        document.getElementById("nameA").value = nameList + "Acabades";
         createTable();
         document.getElementById("nameA").value = nameList + "";
     }
