@@ -71,8 +71,10 @@ function createEliminate(tableId, taskId) {
     if (tableA) {
         const taskElement = document.getElementById(`td-${tableId}-${taskId}`);
         if (taskElement) {
-            taskElement.remove();
-            tableA.task = tableA.task.filter(t => t.id !== taskId);
+            if (confirm("¿Estás seguro de que deseas eliminar esta tarea?")) {
+                taskElement.remove();
+                tableA.task = tableA.task.filter(t => t.id !== taskId);
+            }
         }
     }
 }
@@ -80,7 +82,10 @@ function createEliminate(tableId, taskId) {
 function eliminateTable(tableId) {
     const tableElement = document.getElementById(`div-${tableId}`);
     if (tableElement) {
-        tableElement.remove();
-        table = table.filter(t => t.id !== tableId);
+        if (confirm("¿Estás seguro de que deseas eliminar esta tabla?")) {
+            tableElement.remove();
+            table = table.filter(t => t.id !== tableId);
+        }
     }
 }
+
