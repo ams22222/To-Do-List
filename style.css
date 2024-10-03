@@ -1,12 +1,24 @@
-#is {
-    margin-right: 60px;
+#header {
+    left: 0;
+    top: 0;
     width: 100%;
 }
 
-#footer{
+#is {
+    margin-right: 5%;
     width: 100%;
-    height: 20%;
-    background-color: lightgrey;
-    margin-top: 25%;
-    
+}
+
+#mydiv {
+    margin-top: 50px;
+    margin-left: 12.5%;
+    width: 75%;
+}
+
+
+#myfooter {
+    margin-top: 5%;
+    left: 0;
+    bottom: 0;
+    width: 100%;
 }
