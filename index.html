@@ -3,6 +3,7 @@
 <html lang="es">
 
 <head>
+
     <link rel="stylesheet" href="style.css">
 
     <meta charset="UTF-8">
@@ -14,65 +15,146 @@
 
     <title>JAYR</title>
 
-    <link rel="icon" type="image/png" href="unnamed.jpg"
+    <link rel="icon" type="image/png" href="unnamed.jpg">
 
 </head>
 
-        <body>
+<body>
 
-            <header id="header">
+    <header id="header">
 
-                <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+            <div class="container-fluid">
+
+                <a class="navbar-brand" href="#">
+                    <img src="unnamed.jpg" alt="" width="75px" height="55px" class="d-inline-block align-text-top">
+                </a>
+
+                <div class="collapse navbar-collapse" id="navbarColor01">
 
                     <div class="container-fluid">
+                        <span class="navbar-brand mb-0 h1">Home</span>
+                    </div>
 
-                        <a class="navbar-brand" href="#">
-                            <img src="unnamed.jpg" alt="" width="75px" height="55px" class="d-inline-block align-text-top">
-                        </a>
+                </div>
 
-                        <div class="collapse navbar-collapse" id="navbarColor01">
+                <form>
+                    <button class="btn btn-outline-light btn-lg" id="is" type="submit">Iniciar sessió</button>
+                </form>
 
-                            <div class="container-fluid">
-                                <span class="navbar-brand mb-0 h1">Home</span>
-                            </div>
+            </div>
 
-                            <form>
-                                <button class="btn btn-outline-light btn-lg" id="is" type="submit">Iniciar sessió</button>
-                            </form>
+        </nav>
 
-                        </div>
+    </header>
+
+    <div  class="input-group mb-3 px-3"  id="mydiv">
+
+        <input type="text" class="form-control" placeholder="Nom de la taula" id="nameA" >
+
+        <button type="button" class="btn btn-success" id="basic-addon2"
+        onclick="createTable()">Crear llista
+        </button>
+    
+    </div>
+
+    <div class="container">
+
+        <div id="table" class="row">
+
+        </div>
+
+    </div>
+
+    <footer class="bg-light text-center " id="myfooter">
+
+        <div class="container p-4">
+  
+            <section class="mb-4">
+
+                <p>
+                    Aquesta aplicació està sota la tutela de specialisterner i fundesplai,
+                    qualsevol dubte o reclamació acudir a qualsevol dels dos associats.
+                </p>
+
+            </section>
+
+            <section class="">
+
+                <div class="row">
+
+                    <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+
+                        <h5 class="text-uppercase">GRÀCIES ESPECIALS</h5>
+  
+                        <ul class="list-unstyled mb-0">
+
+                            <a href="https://github.com/" class="text-dark">
+                            <img src="GitHub-Emblem(1).png" width="150" height=""></a>
+        
+                        </ul>
+
+                    </div>
+           
+                    <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+            
+                        <h5 class="text-uppercase">ASSOCIATS</h5>
+  
+                        <ul class="list-unstyled mb-0">
+
+                            <a href="https://fundesplai.org/" class="text-dark">
+                            <img src=fundesplai-logo-web(1).png width="200" height=""></a>
+        
+                        </ul>
 
                     </div>
 
-                </nav>
+                    <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                        
+                        <h5 class="text-uppercase">ASSOCIATS</h5>
+  
+                        <ul class="list-unstyled mb-0">
 
-            </header>
+                            <a href="https://specialisternespain.com/" class="text-dark">
+                            <img src="sp-logo-20th-vect.svg" width="200" height=""></a>
+                
+                        </ul>
 
-            <div  class="input-group mb-3 px-3">
+                    </div>
 
-                <input type="text" class="form-control" placeholder="Nom de la taula" id="nameA" >
+                    <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
 
-                <button type="button" class="btn btn-success" id="basic-addon2"
-                onclick="createTable()">Crear llista
-                </button>
-    
-            </div>
+                        <h5 class="text-uppercase">GRÀCIES ESPECIALS</h5>
+  
+                        <ul class="list-unstyled mb-0">
 
-            <div class="container">
+                            <a href="https://openai.com/chatgpt/" class="text-dark">
+                            <img src="chatgpt-logo-icon-artificial-intelligence-vector-47106879(1).jpg" width="200" height=""></a>
+        
+                        </ul>
 
-                <div id="table" class="row"></div>
+                    </div>
 
-            </div>
-            
-            <footer id="footer">
+                </div>
 
-                <img src=".\imatges\funda_logo.png" alt="Logo de Fundesplai">
-                <img src=".\imatges\special_logo.png" alt="Logo de Specialisterne" style="margin-left: 50px;">
+            </section>
+  
+        </div>
+  
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
 
-            </footer>
+            © 2024 Copyright:
+            <a class="text-dark" href="https://steamcommunity.com/profiles/76561198275233697">JAYR OWNER</a>
+            <a>&</a>
+            <a class="text-dark" href="https://steamcommunity.com/id/FinneVonKleinert">CO-OWNER</a>
+        
+        </div>
+  
+    </footer>
 
-            <script src="script.js"></script>
+    <script src="script.js"></script>
 
-        </body>
+</body>
 
-    </html>
+</html>
