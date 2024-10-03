@@ -10,6 +10,7 @@ function createTable() {
         
         table.push(tableA);
         let dove = document.createElement("div");
+        dove.setAttribute("id", `div-${table.length-1}`);
         dove.classList.add("col-md-4");
         dove.classList.add("border");
         dove.innerHTML = 
@@ -21,6 +22,10 @@ function createTable() {
 
                 <button type="button" class="btn btn-success"
                 onclick="createTask(${table.length-1})">Crear tasca
+                </button>
+
+                <button type="button" class="btn btn-danger" 
+                onclick="eliminateTable(${table.length-1})">Eliminar
                 </button>
     
             </div>
@@ -80,10 +85,20 @@ function createTask(tp) {
 
 function createEliminate(tp,tb) {
 
-    const sda= document.getElementById(`td-${tp}-${tb}`);
+    const sda = document.getElementById(`td-${tp}-${tb}`);
     if(sda){
         table[tp].task.splice(tb, 1);
         sda.remove();
     }
   
+}
+
+function eliminateTable(tp) {
+
+    const ada = document.getElementById(`div-${tp}`)
+    if(ada){
+        table.splice(tp, 1);
+        ada.remove();
+    }
+
 }
