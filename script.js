@@ -1,35 +1,28 @@
 let table = [];
-
+let tableIdCounter = 0;
+let taskIdCounter = 0;
 function createTable() {
     const nametable = document.getElementById("nameA").value.trim();
     if (nametable) {
         let tableA = {
+            id: tableIdCounter++,
             name: nametable,
             task: []
         };
         
         table.push(tableA);
+        const index = tableA.id;
+
         let dove = document.createElement("div");
-        dove.setAttribute("id", `div-${table.length-1}`);
-        dove.classList.add("col-md-4");
-        dove.classList.add("border");
-        dove.innerHTML = 
-            `<h3>${nametable}</h3>
-            
+        dove.setAttribute("id", `div-${index}`);
+        dove.classList.add("col-md-4", "border");
+        dove.innerHTML = `
+            <h3>${nametable}</h3>
             <div class="input-group mb-3">
-
-                <input type="text" class="form-control tascaB" placeholder="Tasca" id="nameB-${table.length-1}">
-
-                <button type="button" class="btn btn-success"
-                onclick="createTask(${table.length-1})">Crear tasca
-                </button>
-
-                <button type="button" class="btn btn-danger" 
-                onclick="eliminateTable(${table.length-1})">Eliminar
-                </button>
-    
+                <input type="text" class="form-control tascaB" placeholder="Tasca" id="nameB-${index}">
+                <button type="button" class="btn btn-success" onclick="createTask(${index})">Crear tasca</button>
+                <button type="button" class="btn btn-danger" onclick="eliminateTable(${index})">Eliminar</button>
             </div>
-            
             <table class="table">
                 <thead>
                     <tr>
@@ -37,68 +30,57 @@ function createTable() {
                         <th scope="col">Accions</th>
                     </tr>
                 </thead>
-                <tbody id="taskA-${table.length-1}">
-                    
+                <tbody id="taskA-${index}">
                 </tbody>
-            </table>`
+            </table>`;
 
-        
         document.getElementById("table").appendChild(dove);
-
-    }
-
-    else {
+    } else {
         alert("Intrudueix un nombre valid per la taula");
     }
 }
 
-function createTask(tp) {
-    const nametask = document.getElementById(`nameB-${tp}`).value.trim();
-    if (nametask) {
+function createTask(tableId) {
+    const nametask = document.getElementById(`nameB-${tableId}`).value.trim();
+    const tableA = table.find(t => t.id === tableId);
+
+    if (nametask && tableA) {
         let taskB = {
+            id: taskIdCounter++,
             name: nametask
         };
+        tableA.task.push(taskB);
 
-    table[tp].task.push(taskB);
-    let dit = document.createElement("tr");
-        dit.setAttribute("id", `td-${tp}-${table[tp].task.length-1}`);
+        let dit = document.createElement("tr");
+        dit.setAttribute("id", `td-${tableId}-${taskB.id}`);
+        dit.innerHTML = `
+            <td>${nametask}</td>
+            <td>
+                <button type="button" class="btn btn-danger" onclick="createEliminate(${tableId}, ${taskB.id})">Eliminar</button>
+            </td>`;
 
-    dit.innerHTML = 
-        `<td>${nametask}</td>
-        
-        <td>
-
-            <button type="button" class="btn btn-danger" 
-            onclick="createEliminate(${tp},${table[tp].task.length-1})">Eliminar
-            </button>
-        
-        </td>`
-
-        document.getElementById(`taskA-${tp}`).appendChild(dit);
-
-    }
-
-    else {
+        document.getElementById(`taskA-${tableId}`).appendChild(dit);
+    } else {
         alert("Intrudueix un nombre valid per la tasca");
     }
 }
 
-function createEliminate(tp,tb) {
+function createEliminate(tableId, taskId) {
+    const tableA = table.find(t => t.id === tableId);
 
-    const sda = document.getElementById(`td-${tp}-${tb}`);
-    if(sda){
-        table[tp].task.splice(tb, 1);
-        sda.remove();
+    if (tableA) {
+        const taskElement = document.getElementById(`td-${tableId}-${taskId}`);
+        if (taskElement) {
+            taskElement.remove();
+            tableA.task = tableA.task.filter(t => t.id !== taskId);
+        }
     }
-  
 }
 
-function eliminateTable(tp) {
-
-    const ada = document.getElementById(`div-${tp}`)
-    if(ada){
-        table.splice(tp, 1);
-        ada.remove();
+function eliminateTable(tableId) {
+    const tableElement = document.getElementById(`div-${tableId}`);
+    if (tableElement) {
+        tableElement.remove();
+        table = table.filter(t => t.id !== tableId);
     }
-
 }
