@@ -1,6 +1,7 @@
 let table = [];
 let tableIdCounter = 0;
 let taskIdCounter = 0;
+
 function createTable() {
     const nametable = document.getElementById("nameA").value.trim();
     if (nametable) {
@@ -71,7 +72,7 @@ function createEliminate(tableId, taskId) {
     if (tableA) {
         const taskElement = document.getElementById(`td-${tableId}-${taskId}`);
         if (taskElement) {
-            if (confirm("¿Estás seguro de que deseas eliminar esta tarea?")) {
+            if (confirm("Estàs segur que desitges eliminar aquesta tasca?")) {
                 taskElement.remove();
                 tableA.task = tableA.task.filter(t => t.id !== taskId);
             }
@@ -82,7 +83,7 @@ function createEliminate(tableId, taskId) {
 function eliminateTable(tableId) {
     const tableElement = document.getElementById(`div-${tableId}`);
     if (tableElement) {
-        if (confirm("¿Estás seguro de que deseas eliminar esta tabla?")) {
+        if (confirm("Estàs segur que desitges eliminar aquesta taula?")) {
             tableElement.remove();
             table = table.filter(t => t.id !== tableId);
         }
