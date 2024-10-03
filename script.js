@@ -85,12 +85,16 @@ function createTask(tp) {
 
 function createEliminate(tp,tb) {
 
-    const sda = document.getElementById(`td-${tp}-${tb}`);
-    if(sda){
-        table[tp].task.splice(tb, 1);
-        sda.remove();
+    if (table[tp] && table[tp].task) {
+        const sda = document.getElementById(`td-${tp}-${tb}`);
+        if(sda){
+            table[tp].task.splice(tb, 1);
+            sda.remove();
+        }
     }
-  
+    else {
+        console.error("No s'ha trobat la tasca o taula seleccionada");
+    }
 }
 
 function eliminateTable(tp) {

@@ -1,25 +1,8 @@
-#header{
+#is {
+    margin-right: 60px;
     width: 100%;
-    height: 5%;
-    background-color: rgba(0, 100, 0, 0.541);
 }
-.sessio{
-    position: fixed;
-    right: 10px;
-    top: 10px;
-    width: 7%;
-    height: 10%;
-}
-.sessio:disabled, button[disabled]{
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    width: 7%;
-    height: 10%;
-    background-color: rgb(255, 255, 255);
-    color: black;
-    border-color: black;
-}
+
 #footer{
     width: 100%;
     height: 20%;
