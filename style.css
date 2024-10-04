@@ -77,3 +77,18 @@
   .form-container .btn:hover, .open-button:hover {
     opacity: 1;
   }
+
+.modal-header {
+    height: 75px;
+    border-color: white !important;
+}
+
+.input-group {
+    width: 94% !important;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.modal-footer {
+    border-color: white !important;
+}
