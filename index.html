@@ -18,35 +18,41 @@
 
 </head>
 
-<body>
-
-    <header id="header">
-
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-
-            <div class="container-fluid">
-
-                <a class="navbar-brand" href="#">
-                    <img src="unnamed.jpg" alt="" width="75px" height="55px" class="d-inline-block align-text-top">
-                </a>
-
-                <div class="collapse navbar-collapse" id="navbarColor01">
-
+        <body>
+            <header id="header">
+                <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                     <div class="container-fluid">
-                        <span class="navbar-brand mb-0 h1">Home</span>
+                        <a class="navbar-brand" href="#">
+                            <img src="unnamed.jpg" alt="" width="75px" height="55px" class="d-inline-block align-text-top">
+                        </a>
+                        <div class="collapse navbar-collapse" id="navbarColor01">
+                            <div class="container-fluid">
+                                <span class="navbar-brand mb-0 h1">Home</span>
+                            </div>
+                            <form>
+                                <button class="btn btn-outline-light btn-lg" id="is" type="button" onclick="openForm()">Iniciar sessió</button>
+                            </form>
+                        </div>
                     </div>
+                </nav>
+            </header>
 
-                </div>
 
-                <form>
-                    <button class="btn btn-outline-light btn-lg" id="is" type="submit">Iniciar sessió</button>
+            <div class="form-popup" id="myForm">
+                <form action="/action_page.php" class="form-container">
+                  <h1>Login</h1>
+              
+                  <label for="username"><b>User</b></label>
+                  <input type="text" placeholder="Nombre de usuario" name="username" id="username" required>
+              
+                  <label for="psw"><b>Password</b></label>
+                  <input type="password" placeholder="Contraseña" name="psw" id="psw" required>
+              
+                  <button type="button" id="login" class="btn">Login</button>
+                  <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
                 </form>
-
             </div>
 
-        </nav>
-
-    </header>
 
     <div  class="input-group mb-3 px-3"  id="mydiv">
 
