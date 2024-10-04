@@ -33,6 +33,8 @@ const agregarUser = (username, password) => {
         const request = objectStore.add(user);
         request.onsuccess = () => {
             resolve('Nuevo usuario añadido');
+            localStorage.setItem('username', username);
+            closeForm();
         };
 
         request.onerror = (event) => {
@@ -51,6 +53,7 @@ const iniciarSesion = (username, password) => {
             const user = event.target.result;
             if (user) {
                 if (user.password === password) {
+                    localStorage.setItem('username', username);
                     resolve('Inicio de sesión exitoso');
                     closeForm();
                 } else {
@@ -223,6 +226,7 @@ function createTask(tableId) {
             </td>`;
 
         document.getElementById(`taskA-${tableId}`).appendChild(dit);
+        updateUserTables(username, tables);
     } else {
         alert("Intrudueix un nombre valid per la tasca");
     }
