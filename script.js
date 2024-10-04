@@ -1,145 +1,3 @@
-const dbName = 'usersdb';
-let db;
-
-const abrirBaseDatos = () => {
-    return new Promise((resolve, reject) => {
-        const request = indexedDB.open(dbName, 2);
-
-        request.onupgradeneeded = (event) => {
-            db = event.target.result;
-            if (!db.objectStoreNames.contains("users")) {
-                const userStore = db.createObjectStore("users", { keyPath: 'username' });
-                userStore.createIndex('tables', 'tables', { unique: false });
-            }
-        };
-
-        request.onsuccess = (event) => {
-            db = event.target.result;
-            resolve(db);
-        };
-
-        request.onerror = (event) => {
-            reject('Error al abrir la base de datos: ' + event.target.error);
-        };
-    });
-};
-
-const agregarUser = (username, password) => {
-    return new Promise((resolve, reject) => {
-        const transaction = db.transaction(['users'], 'readwrite');
-        const objectStore = transaction.objectStore('users');
-        const user = { username, password, tables: [] };
-
-        const request = objectStore.add(user);
-        request.onsuccess = () => {
-            resolve('Nuevo usuario añadido');
-        };
-
-        request.onerror = (event) => {
-            reject('Error al agregar usuario: ' + event.target.error);
-        };
-    });
-};
-
-const iniciarSesion = (username, password) => {
-    return new Promise((resolve, reject) => {
-        const transaction = db.transaction(['users'], 'readonly');
-        const objectStore = transaction.objectStore('users');
-        const request = objectStore.get(username);
-
-        request.onsuccess = (event) => {
-            const user = event.target.result;
-            if (user) {
-                if (user.password === password) {
-                    resolve('Inicio de sesión exitoso');
-                    closeForm();
-                } else {
-                    reject('Contraseña incorrecta');
-                }
-            } else {
-                reject('Usuario no registrado');
-            }
-        };
-
-        request.onerror = (event) => {
-            reject('Error al verificar usuario: ' + event.target.error);
-        };
-    });
-};
-
-
-document.getElementById("login").addEventListener("click", function() {
-    let username = document.getElementById("username").value.trim();
-    let password = document.getElementById("psw").value.trim();
-
-    if (username && password) {
-        abrirBaseDatos().then(() => {
-            iniciarSesion(username, password)
-            .then((mensaje) => {
-                alert(mensaje);
-            })
-            .catch((error) => {
-                if (error === 'Usuario no registrado') {
-                    if (confirm('Usuario no registrado. ¿Quieres crear una nueva cuenta?')) {
-                        agregarUser(username, password)
-                        .then((mensaje) => {
-                            alert(mensaje);
-                        })
-                        .catch((error) => {
-                            alert(error);
-                        });
-                    }
-                } else {
-                    alert(error);
-                }
-            });
-        });
-    } else {
-        alert('Por favor, introduce un nombre de usuario y contraseña válidos.');
-    }
-});
-
-
-function openForm() {
-    document.getElementById("myForm").style.display = "block";
-}
-
-function closeForm() {
-    document.getElementById("myForm").style.display = "none";
-}
-
-
-
-const actualizarTablasUsuario = (username, tables) => {
-    return new Promise((resolve, reject) => {
-        const transaction = db.transaction(['users'], 'readwrite');
-        const objectStore = transaction.objectStore('users');
-        const request = objectStore.get(username);
-
-        request.onsuccess = (event) => {
-            const user = event.target.result;
-            if (user) {
-                user.tables = tables; 
-                const updateRequest = objectStore.put(user);
-                updateRequest.onsuccess = () => {
-                    resolve('Tablas actualizadas correctamente');
-                };
-                updateRequest.onerror = (event) => {
-                    reject('Error al actualizar las tablas: ' + event.target.error);
-                };
-            } else {
-                reject('Usuario no encontrado');
-            }
-        };
-
-        request.onerror = (event) => {
-            reject('Error al obtener el usuario: ' + event.target.error);
-        };
-    });
-};
-
-
-
 let table = [];
 let tableIdCounter = 0;
 let taskIdCounter = 0;
@@ -161,7 +19,7 @@ function comença(){
 
 function createTable() {
     const nametable = document.getElementById("nameA").value.trim();
-    if (nametable) {    
+    if (nametable) {
         let tableA = {
             id: taskIdCounter++,
             name: nametable,
@@ -196,8 +54,7 @@ function createTable() {
     } else {
         alert("Intrudueix un nombre valid per la taula");
     }
-} 
-
+}   
 function createTask(tableId) {
     const nametask = document.getElementById(`nameB-${tableId}`).value.trim();
     const tableA = table.find(t => t.id === tableId);
@@ -242,6 +99,7 @@ function createEliminate(tableId, taskId) {
 
 function eliminateTable(tableId) {
     const tableElement = document.getElementById(`div-${tableId}`);
+    const tableA = table.find(t => t.id === tableId);
     if (tableElement) {
         if (confirm("Estàs segur que desitges eliminar aquesta taula?")) {
             tableElement.remove();
@@ -250,40 +108,39 @@ function eliminateTable(tableId) {
     }
 }
 
-function modal(tableId, taskId){
-    console.log(`nameB-${tableId}   td-${tableId}-${taskId}`)
-    const tableB = table.find(t => t.id === tableId)
-    const task = tableB.task.find(t => t.id !== tableId);
-    if (!task){
-        console.error('task not found!');
+function modal(tableId, taskId) {
+    console.log(`nameB-${tableId}  td-${tableId}-${taskId}`);
+    const id = taskId;
+    const tableB = table.find(t => t.id === tableId);
+    const task = tableB.task.find(t => t.id === taskId);
+    if (!task) {
+        console.error('Task not found!');
         return;
     }
-    
-    const taskname = task.name || 'error aqui';
-    const descName = task.descripcio || 'error';
+
+    const taskName = task.name || 'Task Name Not Found';
+    const descName = task.descripcio || 'Description Not Found';
     let dove = document.createElement("div");
     dove.classList.add("modal");
-    dove.innerHTML =`
-        <div class="modal" tabindex="-1"></div>
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <input class="modal-title" value="${taskname}"></input>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <input value="${descName}"></input>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primari">Saves changes</button>
-                    </div>
+    dove.innerHTML = `
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <input class="modal-title" value="${taskName}"></input>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input value="${descName}"></input>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
-        </div>`;
+        </div>
+    `;
+    document.body.appendChild(dove);
 
-        document.body.appendChild(dove);
-
-        var myModal = new bootstrap.Modal(dove);
-        myModal.show();
+    var myModal = new bootstrap.Modal(dove);
+    myModal.show();
 }
