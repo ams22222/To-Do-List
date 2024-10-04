@@ -11,7 +11,7 @@
 
 #mydiv {
     margin-top: 50px;
-    margin-left: 12.5%;
+    margin-left: 3.5%;
     width: 75%;
 }
 
@@ -20,4 +20,19 @@
     left: 0;
     bottom: 0;
     width: 100%;
+}
+
+.modal-header {
+    height: 75px;
+    border-color: white !important;
+}
+
+.input-group {
+    width: 94% !important;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.modal-footer {
+    border-color: white !important;
 }

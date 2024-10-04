@@ -34,20 +34,34 @@ function createTable() {
         dove.classList.add("col-md-4", "border");
         dove.innerHTML = `
             <h3>${nametable}</h3>
+
             <div class="input-group mb-3">
+
                 <input type="text" class="form-control tascaB" placeholder="Tasca" id="nameB-${index}">
-                <button type="button" class="btn btn-success" onclick="createTask(${index})">Crear tasca</button>
-                <button type="button" class="btn btn-danger" onclick="eliminateTable(${index})">Eliminar</button>
+                <button type="button" class="btn btn-success" onclick="createTask(${index})">Crear tasca
+                </button>
+                <button type="button" class="btn btn-danger" onclick="eliminateTable(${index})">Eliminar
+                </button>
+            
             </div>
+
             <table class="table">
+
                 <thead>
+
                     <tr>
+                    
                         <th scope="col">Tasques</th>
                         <th scope="col">Accions</th>
+
                     </tr>
+
                 </thead>
+
                 <tbody id="taskA-${index}">
+
                 </tbody>
+                
             </table>`;
 
         document.getElementById("table").appendChild(dove);
@@ -70,9 +84,13 @@ function createTask(tableId) {
         dit.setAttribute("id", `td-${tableId}-${taskB.id}`);
         dit.innerHTML = `
             <td>${nametask}</td>
+
             <td>
-                <button type="button" class="btn btn-danger" onclick="createEliminate(${tableId}, ${taskB.id})">Eliminar</button>
-                <button type="button" class="btn btn-primary" onclick="modal(${tableId}, ${taskB.id})">Editar</button>
+
+                <button type="button" class="btn btn-danger" onclick="createEliminate(${tableId}, ${taskB.id})">
+                Eliminar</button>
+                <button type="button" class="btn btn-primary" onclick="modal(${tableId}, ${taskB.id})">
+                Editar</button>
             
             </td>`;
 
@@ -107,27 +125,64 @@ function eliminateTable(tableId) {
 }
 
 
-function modal(tableId, taskId){
-    const tableA = table.find(t => t.id === tableId);
-    const taskElement = document.getElementById(`td-${tableId}-${taskId}`);
-    let dove = document.createElement("div");
-    dove.classList.add("modal");
-    dove.innerHTML =`
-        <div class="modal" tabindex="-1"></div>
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">tasca</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Modal body text gos here</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primari">Saves changes</button>
-                    </div>
-                </div>
-            </div>
-        </div>`
+function modal(tableId, taskid) {
+    const tableB = table.find(t => t.id === tableId);
+    const taskB = tableB.task.find(c => c.id === taskid);
+    console.log(taskB);
+    let namet=taskB.name;
+        if(tableB) {
+            const taskElementB = document.getElementById(`td-${tableId}-${taskid}`);
+                if (taskElementB) {
+                    let ros = document.createElement("div");
+                    ros.innerHTML =
+                        `<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel"
+                        aria-hidden="true">
+
+                            <div class="modal-dialog">
+
+                                <div class="modal-content">
+
+                                    <div class="modal-header">
+
+                                        <input type="text" class="form-control" placeholder="Nom de la tasca" 
+                                        id="taskaZ" value="${namet}">
+
+                                    </div>
+
+                                    <div class="input-group">
+
+                                        <textarea class="form-control" aria-label="With textarea" 
+                                        placeholder="Descripció" id="descripcióA" rows="10"></textarea>
+                                
+                                    </div>
+
+                                    <div class="modal-footer">
+
+                                        <button type="button" class="btn btn-secondary" onclick="createCancer()"data-bs-dismiss="modal">
+                                        Tancar</button>
+                                        <button type="button" class="btn btn-primary" onclick="createSave()">
+                                        Guardar canvis</button>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>`
+                    
+                    document.getElementById("table").appendChild(ros);
+                    var myModal = new bootstrap.Modal(document.getElementById('myModal'));
+                    myModal.show();
+                }
+        }
+}
+
+function createCancer() {
+    let remo = document.getElementById("myModal");
+    remo.remove()
+}
+
+function createSave() {
+    
 }
