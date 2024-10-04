@@ -14,39 +14,45 @@
 
     <title>JAYR</title>
 
-    <link rel="icon" type="image/png" href="unnamed.jpg">
+    <link rel="icon" type="image/png" href="imatges/unnamed.jpg">
 
 </head>
 
-<body>
-
-    <header id="header">
-
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-
-            <div class="container-fluid">
-
-                <a class="navbar-brand" href="#">
-                    <img src="unnamed.jpg" alt="" width="75px" height="55px" class="d-inline-block align-text-top">
-                </a>
-
-                <div class="collapse navbar-collapse" id="navbarColor01">
-
+        <body>
+            <header id="header">
+                <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                     <div class="container-fluid">
-                        <span class="navbar-brand mb-0 h1">Home</span>
+                        <a class="navbar-brand" href="#">
+                            <img src="imatges/unnamed.jpg" alt="" width="75px" height="55px" class="d-inline-block align-text-top">
+                        </a>
+                        <div class="collapse navbar-collapse" id="navbarColor01">
+                            <div class="container-fluid">
+                                <span class="navbar-brand mb-0 h1">Home</span>
+                            </div>
+                            <form>
+                                <button class="btn btn-outline-light btn-lg" id="is" type="button" onclick="openForm()">Iniciar sessió</button>
+                            </form>
+                        </div>
                     </div>
+                </nav>
+            </header>
 
-                </div>
 
-                <form>
-                    <button class="btn btn-outline-light btn-lg" id="is" type="submit">Iniciar sessió</button>
+            <div class="form-popup" id="myForm">
+                <form action="/action_page.php" class="form-container">
+                  <h1>Login</h1>
+              
+                  <label for="username"><b>User</b></label>
+                  <input type="text" placeholder="Nombre de usuario" name="username" id="username" required>
+              
+                  <label for="psw"><b>Password</b></label>
+                  <input type="password" placeholder="Contraseña" name="psw" id="psw" required>
+              
+                  <button type="button" id="login" class="btn">Login</button>
+                  <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
                 </form>
-
             </div>
 
-        </nav>
-
-    </header>
 
     <div  class="input-group mb-3 px-3"  id="mydiv">
 
@@ -90,7 +96,7 @@
                         <ul class="list-unstyled mb-0">
 
                             <a href="https://github.com/" class="text-dark">
-                            <img src="GitHub-Emblem(1).png" width="150" height=""></a>
+                            <img src="imatges/GitHub-Emblem(1).png" width="150" height=""></a>
         
                         </ul>
 
@@ -103,7 +109,7 @@
                         <ul class="list-unstyled mb-0">
 
                             <a href="https://fundesplai.org/" class="text-dark">
-                            <img src=fundesplai-logo-web(1).png width="200" height=""></a>
+                            <img src=imatges/fundesplai-logo-web(1).png width="200" height=""></a>
         
                         </ul>
 
@@ -116,7 +122,7 @@
                         <ul class="list-unstyled mb-0">
 
                             <a href="https://specialisternespain.com/" class="text-dark">
-                            <img src="sp-logo-20th-vect.svg" width="200" height=""></a>
+                            <img src="imatges/sp-logo-20th-vect.svg" width="200" height=""></a>
                 
                         </ul>
 
@@ -129,7 +135,7 @@
                         <ul class="list-unstyled mb-0">
 
                             <a href="https://openai.com/chatgpt/" class="text-dark">
-                            <img src="chatgpt-logo-icon-artificial-intelligence-vector-47106879(1).jpg" width="200" height=""></a>
+                            <img src="imatges/chatgpt-logo-icon-artificial-intelligence-vector-47106879(1).jpg" width="200" height=""></a>
         
                         </ul>
 
