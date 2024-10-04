@@ -76,7 +76,8 @@ function createTask(tableId) {
     if (nametask && tableA) {
         let taskB = {
             id: taskIdCounter++,
-            name: nametask
+            name: nametask,
+            description: ''
         };
         tableA.task.push(taskB);
 
@@ -128,8 +129,8 @@ function eliminateTable(tableId) {
 function modal(tableId, taskid) {
     const tableB = table.find(t => t.id === tableId);
     const taskB = tableB.task.find(c => c.id === taskid);
-    console.log(taskB);
-    let namet=taskB.name;
+    let col = taskB.description;
+    let namet = taskB.name;
         if(tableB) {
             const taskElementB = document.getElementById(`td-${tableId}-${taskid}`);
                 if (taskElementB) {
@@ -152,16 +153,17 @@ function modal(tableId, taskid) {
                                     <div class="input-group">
 
                                         <textarea class="form-control" aria-label="With textarea" 
-                                        placeholder="Descripció" id="descripcióA" rows="10"></textarea>
+                                        placeholder="Descripció" id="descripcióA" rows="10"
+                                        >${col}</textarea>
                                 
                                     </div>
 
                                     <div class="modal-footer">
 
-                                        <button type="button" class="btn btn-secondary" onclick="createCancer()"data-bs-dismiss="modal">
-                                        Tancar</button>
-                                        <button type="button" class="btn btn-primary" onclick="createSave()">
-                                        Guardar canvis</button>
+                                        <button type="button" class="btn btn-secondary" onclick="createCancer()
+                                        "data-bs-dismiss="modal">Tancar</button>
+                                        <button type="button" class="btn btn-primary" 
+                                        onclick="createSave(${tableId}, ${taskid})">Guardar canvis</button>
 
                                     </div>
 
@@ -183,6 +185,10 @@ function createCancer() {
     remo.remove()
 }
 
-function createSave() {
-    
+function createSave(tableId, taskid) {
+    const tableB = table.find(t => t.id === tableId);
+    const taskB = tableB.task.find(c => c.id === taskid);
+    let ram = document.getElementById("descripcióA").value;
+    taskB.description = ram;
+    alert("Tasca modificada correctament")
 }
