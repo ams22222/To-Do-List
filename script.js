@@ -253,7 +253,7 @@ function eliminateTable(tableId) {
 function modal(tableId, taskId){
     console.log(`nameB-${tableId}   td-${tableId}-${taskId}`)
     const tableB = table.find(t => t.id === tableId)
-    const task = tableB.task.find(t => t.id === tableId);
+    const task = tableB.task.find(t => t.id !== tableId);
     if (!task){
         console.error('task not found!');
         return;
