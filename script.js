@@ -148,6 +148,7 @@ let tableIdCounter = 0;
 let taskIdCounter = 0;
 
 function createTable() {
+    const username = localStorage.getItem('username');
     const nametable = document.getElementById("nameA").value.trim();
     if (nametable) {    
         let tableA = {
@@ -195,6 +196,8 @@ function createTable() {
             </table>`;
 
         document.getElementById("table").appendChild(dove);
+        actualizarTablasUsuario(username, table);
+
     } else {
         alert("Intrudueix un nombre valid per la taula");
     }
