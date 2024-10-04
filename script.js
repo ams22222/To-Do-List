@@ -33,6 +33,8 @@ const agregarUser = (username, password) => {
         const request = objectStore.add(user);
         request.onsuccess = () => {
             resolve('Nuevo usuario añadido');
+            localStorage.setItem('username', username);
+            closeForm();
         };
 
         request.onerror = (event) => {
@@ -51,6 +53,7 @@ const iniciarSesion = (username, password) => {
             const user = event.target.result;
             if (user) {
                 if (user.password === password) {
+                    localStorage.setItem('username', username);
                     resolve('Inicio de sesión exitoso');
                     closeForm();
                 } else {
@@ -144,20 +147,7 @@ let table = [];
 let tableIdCounter = 0;
 let taskIdCounter = 0;
 let sessi_on = 0;
-comença();
-// document.getElementById("nameA").innerText
-function comença(){
-    if(sessi_on == 0){
-        let nameList = document.getElementById("nameA").value;
-        document.getElementById("nameA").value = nameList + "Pendents";
-        createTable();
-        document.getElementById("nameA").value = nameList + "En producció";
-        createTable();
-        document.getElementById("nameA").value = nameList + "Acabades";
-        createTable();
-        document.getElementById("nameA").value = nameList + "";
-    }
-}   
+ 
 
 function createTable() {
     const nametable = document.getElementById("nameA").value.trim();
@@ -219,6 +209,7 @@ function createTask(tableId) {
             </td>`;
 
         document.getElementById(`taskA-${tableId}`).appendChild(dit);
+        updateUserTables(username, tables);
     } else {
         alert("Intrudueix un nombre valid per la tasca");
     }
@@ -246,30 +237,4 @@ function eliminateTable(tableId) {
             table = table.filter(t => t.id !== tableId);
         }
     }
-}
-
-
-function modal(tableId, taskId){
-    const tableA = table.find(t => t.id === tableId);
-    const taskElement = document.getElementById(`td-${tableId}-${taskId}`);
-    let dove = document.createElement("div");
-    dove.classList.add("modal");
-    dove.innerHTML =`
-        <div class="modal" tabindex="-1"></div>
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">tasca</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Modal body text gos here</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primari">Saves changes</button>
-                    </div>
-                </div>
-            </div>
-        </div>`
 }
