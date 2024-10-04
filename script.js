@@ -129,5 +129,10 @@ function modal(tableId, taskId){
                     </div>
                 </div>
             </div>
-        </div>`
+        </div>`;
+
+        document.body.appendChild(dove);
+
+        var myModal = new bootstrap.Modal(dove);
+        myModal.show();
 }
