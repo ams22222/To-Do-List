@@ -54,7 +54,8 @@ function createTable() {
     } else {
         alert("Intrudueix un nombre valid per la taula");
     }
-}   
+} 
+
 function createTask(tableId) {
     const nametask = document.getElementById(`nameB-${tableId}`).value.trim();
     const tableA = table.find(t => t.id === tableId);
@@ -62,7 +63,8 @@ function createTask(tableId) {
     if (nametask && tableA) {
         let taskB = {
             id: taskIdCounter++,
-            name: nametask
+            name: nametask,
+            descripcio: '.'
         };
         tableA.task.push(taskB);
 
@@ -106,10 +108,17 @@ function eliminateTable(tableId) {
     }
 }
 
-
 function modal(tableId, taskId){
-    const tableA = table.find(t => t.id === tableId);
-    const taskElement = document.getElementById(`td-${tableId}-${taskId}`);
+    console.log(`nameB-${tableId}   td-${tableId}-${taskId}`)
+    const tableB = table.find(t => t.id === tableId)
+    const task = tableB.task.find(t => t.id === tableId);
+    if (!task){
+        console.error('task not found!');
+        return;
+    }
+    
+    const taskname = task.name || 'error aqui';
+    const descName = task.descripcio || 'error';
     let dove = document.createElement("div");
     dove.classList.add("modal");
     dove.innerHTML =`
@@ -117,11 +126,11 @@ function modal(tableId, taskId){
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">tasca</h4>
+                        <input class="modal-title" value="${taskname}"></input>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close"></button>
                     </div>
                     <div class="modal-body">
-                        <p>Modal body text gos here</p>
+                        <input value="${descName}"></input>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
