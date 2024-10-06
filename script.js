@@ -189,6 +189,25 @@ function renderTables() {
 }
 
 
+
+
+function renderTask(tableId, taskB) {
+    const taskContainer = document.getElementById(`taskA-${tableId}`);
+    let dit = document.createElement("tr");
+    dit.setAttribute("id", `td-${tableId}-${taskB.id}`);
+    dit.innerHTML = `
+        <td>${taskB.name}</td>
+        <td>
+            <button type="button" class="btn btn-danger btn-sm" onclick="createEliminate(${tableId}, ${taskB.id})">Eliminar</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="modal(${tableId}, ${taskB.id})">Editar</button>
+        </td>
+    `;
+    taskContainer.appendChild(dit);
+}
+
+
+
+
 function openForm() {
     document.getElementById("myForm").style.display = "block";
 }
@@ -324,18 +343,29 @@ function createTask(tableId) {
 }
 
 
-function renderTask(tableId, taskB) {
-    const taskContainer = document.getElementById(`taskA-${tableId}`);
-    let dit = document.createElement("tr");
-    dit.setAttribute("id", `td-${tableId}-${taskB.id}`);
-    dit.innerHTML = `
-        <td>${taskB.name}</td>
-        <td>
-            <button type="button" class="btn btn-danger btn-sm" onclick="createEliminate(${tableId}, ${taskB.id})">Eliminar</button>
-            <button type="button" class="btn btn-primary btn-sm" onclick="openModal(${tableId}, ${taskB.id})">Editar</button>
-        </td>
-    `;
-    taskContainer.appendChild(dit);
+
+function eliminateTable(tableId) {
+    if (!currentUser) {
+        alert('Por favor, inicia sesión primero.');
+        return;
+    }
+
+    const tableElement = document.getElementById(`div-${tableId}`);
+
+    if (tableElement) {
+        if (confirm("¿Estás seguro de eliminar esta tabla?")) {
+            tableElement.remove();
+            tables = tables.filter(t => t.id !== tableId);
+            actualizarTablasUsuario(currentUser, tables)
+                .then(() => {
+                    console.log("Tabla eliminada correctamente");
+                })
+                .catch((error) => {
+                    console.error(error);
+                    alert(error);
+                });
+        }
+    }
 }
 
 
@@ -369,108 +399,152 @@ function createEliminate(tableId, taskId) {
 
 
 
-function eliminateTable(tableId) {
-    if (!currentUser) {
-        alert('Por favor, inicia sesión primero.');
-        return;
+function modal(tableId, taskid) {
+    const existingModal = document.getElementById('myModal');
+    if (existingModal) {
+        existingModal.remove();
     }
 
-    const tableElement = document.getElementById(`div-${tableId}`);
+    const tableB = tables.find(t => t.id === tableId);
+    const taskB = tableB.tasks.find(c => c.id === taskid);
+    let col = taskB.description;
+    let namet = taskB.name;
 
-    if (tableElement) {
-        if (confirm("¿Estás seguro de eliminar esta tabla?")) {
-            tableElement.remove();
-            tables = tables.filter(t => t.id !== tableId);
-            actualizarTablasUsuario(currentUser, tables)
-                .then(() => {
-                    console.log("Tabla eliminada correctamente");
-                })
-                .catch((error) => {
-                    console.error(error);
-                    alert(error);
-                });
+    if(tableB) {
+        const taskElementB = document.getElementById(`td-${tableId}-${taskid}`);
+        if (taskElementB) {
+            let ros = document.createElement("div");
+            ros.innerHTML =
+                `<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <input type="text" class="form-control" placeholder="Nom de la tasca" id="taskaZ" value="${namet}">
+                            </div>
+                            <div class="input-group">
+                                <textarea class="form-control" aria-label="With textarea" placeholder="Descripció" id="descripcióA" rows="10">${col}</textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" onclick="createCancer()" data-bs-dismiss="modal">Tancar</button>
+                                <button type="button" class="btn btn-primary" onclick="createSave(${tableId}, ${taskid})">Guardar canvis</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                
+            document.getElementById("table").appendChild(ros);
+            var myModal = new bootstrap.Modal(document.getElementById('myModal'));
+            myModal.show();
         }
     }
 }
 
-// Variables para la edición de tareas
-let editingTableId = null;
-let editingTaskId = null;
 
-// Función para abrir el modal de edición de tareas
-function openModal(tableId, taskId) {
-    const tableA = tables.find(t => t.id === tableId);
-    const taskB = tableA ? tableA.tasks.find(c => c.id === taskId) : null;
-
-    if (tableA && taskB) {
-        editingTableId = tableId;
-        editingTaskId = taskId;
-
-        document.getElementById("taskaZ").value = taskB.name;
-        document.getElementById("descripcióA").value = taskB.description;
-
-        var myModal = new bootstrap.Modal(document.getElementById('myModal'));
-        myModal.show();
+function createCancer() {
+    const modalElement = document.getElementById('myModal');
+    const modalInstance = bootstrap.Modal.getInstance(modalElement);
+    
+    if (modalInstance) {
+        modalInstance.dispose();
     }
+    
+    modalElement.remove(); 
 }
 
-// Función para guardar los cambios de una tarea desde el modal
-function saveTaskChanges() {
-    const username = localStorage.getItem('username');
-    if (!username) {
-        alert('Por favor, inicia sesión primero.');
-        return;
+
+function createSave(tableId, taskid) {
+    const tableB = tables.find(t => t.id === tableId);
+    const taskB = tableB.tasks.find(c => c.id === taskid);
+
+    let rem = document.getElementById("taskaZ").value;
+    taskB.name = rem;
+    let ram = document.getElementById("descripcióA").value;
+    taskB.description = ram;
+
+    const modalElement = document.getElementById('myModal');
+    const modalInstance = bootstrap.Modal.getInstance(modalElement);
+
+    if (modalInstance) {
+        modalInstance.hide();  
+        modalInstance.dispose();
     }
 
-    if (editingTableId === null || editingTaskId === null) {
-        alert('No se ha seleccionado una tarea para editar.');
-        return;
+    if (modalElement) {
+        modalElement.remove();
     }
 
-    const taskName = document.getElementById("taskaZ").value.trim();
-    const taskDescription = document.getElementById("descripcióA").value.trim();
 
-    if (!taskName) {
-        alert('El nombre de la tarea no puede estar vacío.');
-        return;
-    }
-
-    const tableA = tables.find(t => t.id === editingTableId);
-    const taskB = tableA ? tableA.tasks.find(c => c.id === editingTaskId) : null;
-
-    if (tableA && taskB) {
-        taskB.name = taskName;
-        taskB.description = taskDescription;
-
-        actualizarTablasUsuario(username, tables)
-            .then(() => {
-                console.log("Tarea modificada correctamente");
-                renderTables(); // Actualizar la interfaz
-                // Cerrar el modal
-                var myModal = bootstrap.Modal.getInstance(document.getElementById('myModal'));
-                myModal.hide();
-            })
-            .catch((error) => {
-                console.error(error);
-                alert(error);
-            });
-    }
+    actualizarTablasUsuario(currentUser, tables)
+        .then(() => {
+            alert("Tasca modificada correctament");
+            renderTables();
+        })
+        .catch((error) => {
+            console.error(error);
+            alert(error);
+        });
 }
 
-// Función para cerrar el modal manualmente (si se necesita)
-function closeModal() {
-    var myModal = bootstrap.Modal.getInstance(document.getElementById('myModal'));
-    myModal.hide();
-}
 
-// Opcional: Función para cerrar sesión
-function logout() {
-    localStorage.removeItem('username');
-    currentUser = null;
-    tables = [];
-    renderTables();
-    alert('Has cerrado sesión.');
-}
+
+
+// // Función para guardar los cambios de una tarea desde el modal
+// function saveTaskChanges() {
+//     const username = localStorage.getItem('username');
+//     if (!username) {
+//         alert('Por favor, inicia sesión primero.');
+//         return;
+//     }
+
+//     if (editingTableId === null || editingTaskId === null) {
+//         alert('No se ha seleccionado una tarea para editar.');
+//         return;
+//     }
+
+//     const taskName = document.getElementById("taskaZ").value.trim();
+//     const taskDescription = document.getElementById("descripcióA").value.trim();
+
+//     if (!taskName) {
+//         alert('El nombre de la tarea no puede estar vacío.');
+//         return;
+//     }
+
+//     const tableA = tables.find(t => t.id === editingTableId);
+//     const taskB = tableA ? tableA.tasks.find(c => c.id === editingTaskId) : null;
+
+//     if (tableA && taskB) {
+//         taskB.name = taskName;
+//         taskB.description = taskDescription;
+
+//         actualizarTablasUsuario(username, tables)
+//             .then(() => {
+//                 console.log("Tarea modificada correctamente");
+//                 renderTables(); // Actualizar la interfaz
+//                 // Cerrar el modal
+//                 var myModal = bootstrap.Modal.getInstance(document.getElementById('myModal'));
+//                 myModal.hide();
+//             })
+//             .catch((error) => {
+//                 console.error(error);
+//                 alert(error);
+//             });
+//     }
+// }
+
+// // Función para cerrar el modal manualmente (si se necesita)
+// function closeModal() {
+//     var myModal = bootstrap.Modal.getInstance(document.getElementById('myModal'));
+//     myModal.hide();
+// }
+
+// // Opcional: Función para cerrar sesión
+// function logout() {
+//     localStorage.removeItem('username');
+//     currentUser = null;
+//     tables = [];
+//     renderTables();
+//     alert('Has cerrado sesión.');
+// }
 
 // Opcional: Añadir un botón de logout en el header
 // Puedes añadir el siguiente código en el HTML dentro del header
