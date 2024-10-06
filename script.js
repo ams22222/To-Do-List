@@ -41,6 +41,11 @@ const agregarUser = (username, password) => {
             resolve('Nuevo usuario añadido');
             localStorage.setItem('username', username);
             currentUser = username;
+
+            document.getElementById("is").style.display = 'none';
+            document.getElementById("logoutButton").innerText = username;
+            document.getElementById("logoutButton").style.display = 'inline-block';
+
             closeForm();
         };
 
@@ -85,6 +90,11 @@ const iniciarSesion = (username, password) => {
             if (user) {
                 if (user.password === password) {
                     localStorage.setItem('username', username);
+
+                    document.getElementById("is").style.display = 'none';
+                    document.getElementById("logoutButton").innerText = username;
+                    document.getElementById("logoutButton").style.display = 'inline-block';
+
                     resolve('Inicio de sesión exitoso');
                     closeForm();
                 } else {
@@ -100,6 +110,21 @@ const iniciarSesion = (username, password) => {
         };
     });
 };
+
+
+function logout() {
+    currentUser = null;
+    localStorage.removeItem('username');
+    document.getElementById("is").style.display = 'inline-block';
+    document.getElementById("logoutButton").style.display = 'none';
+
+   
+    const tableContainer = document.getElementById("table");
+    tableContainer.innerHTML = ''; 
+
+    closelogoutForm();
+    alert('Has cerrado sesión.');
+}
 
 
 document.getElementById("login").addEventListener("click", function() {
@@ -189,12 +214,40 @@ function renderTables() {
 }
 
 
+
+
+function renderTask(tableId, taskB) {
+    const taskContainer = document.getElementById(`taskA-${tableId}`);
+    let dit = document.createElement("tr");
+    dit.setAttribute("id", `td-${tableId}-${taskB.id}`);
+    dit.innerHTML = `
+        <td>${taskB.name}</td>
+        <td>
+            <button type="button" class="btn btn-danger btn-sm" onclick="createEliminate(${tableId}, ${taskB.id})">Eliminar</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="modal(${tableId}, ${taskB.id})">Editar</button>
+        </td>
+    `;
+    taskContainer.appendChild(dit);
+}
+
+
+
+
 function openForm() {
     document.getElementById("myForm").style.display = "block";
 }
 
 function closeForm() {
     document.getElementById("myForm").style.display = "none";
+}
+
+
+function logoutForm() {
+    document.getElementById("lgout").style.display = "block";
+}
+
+function closelogoutForm() {
+    document.getElementById("lgout").style.display = "none";
 }
 
 
@@ -324,18 +377,29 @@ function createTask(tableId) {
 }
 
 
-function renderTask(tableId, taskB) {
-    const taskContainer = document.getElementById(`taskA-${tableId}`);
-    let dit = document.createElement("tr");
-    dit.setAttribute("id", `td-${tableId}-${taskB.id}`);
-    dit.innerHTML = `
-        <td>${taskB.name}</td>
-        <td>
-            <button type="button" class="btn btn-danger btn-sm" onclick="createEliminate(${tableId}, ${taskB.id})">Eliminar</button>
-            <button type="button" class="btn btn-primary btn-sm" onclick="openModal(${tableId}, ${taskB.id})">Editar</button>
-        </td>
-    `;
-    taskContainer.appendChild(dit);
+
+function eliminateTable(tableId) {
+    if (!currentUser) {
+        alert('Por favor, inicia sesión primero.');
+        return;
+    }
+
+    const tableElement = document.getElementById(`div-${tableId}`);
+
+    if (tableElement) {
+        if (confirm("¿Estás seguro de eliminar esta tabla?")) {
+            tableElement.remove();
+            tables = tables.filter(t => t.id !== tableId);
+            actualizarTablasUsuario(currentUser, tables)
+                .then(() => {
+                    console.log("Tabla eliminada correctamente");
+                })
+                .catch((error) => {
+                    console.error(error);
+                    alert(error);
+                });
+        }
+    }
 }
 
 
@@ -369,112 +433,96 @@ function createEliminate(tableId, taskId) {
 
 
 
-function eliminateTable(tableId) {
-    if (!currentUser) {
-        alert('Por favor, inicia sesión primero.');
-        return;
-    }
+function modal(tableId, taskid) {
+    const tableB = tables.find(t => t.id === tableId);
+    const taskB = tableB.tasks.find(c => c.id === taskid);
+    let description = taskB.description;
+    let taskName = taskB.name;
 
-    const tableElement = document.getElementById(`div-${tableId}`);
+    let tableOptions = tables.map(t => 
+        `<option value="${t.id}" ${t.id === tableId ? 'selected' : ''}>${t.name}</option>`
+    ).join('');
 
-    if (tableElement) {
-        if (confirm("¿Estás seguro de eliminar esta tabla?")) {
-            tableElement.remove();
-            tables = tables.filter(t => t.id !== tableId);
-            actualizarTablasUsuario(currentUser, tables)
-                .then(() => {
-                    console.log("Tabla eliminada correctamente");
-                })
-                .catch((error) => {
-                    console.error(error);
-                    alert(error);
-                });
+    if (tableB) {
+        const taskElementB = document.getElementById(`td-${tableId}-${taskid}`);
+        if (taskElementB) {
+            let modalContent = `
+                <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <input type="text" class="form-control" placeholder="Nombre de la tarea" id="taskaZ" value="${taskName}">
+                            </div>
+                            <div class="input-group">
+                                <textarea class="form-control" aria-label="With textarea" placeholder="Descripción" id="descripcióA" rows="10">${description}</textarea>
+                            </div>
+                            <div class="input-group mt-3">
+                                <label for="tableSelect" class="form-label">Mover a tabla:</label>
+                                <select class="form-select" id="tableSelect">
+                                    ${tableOptions}
+                                </select>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" onclick="createCancer()" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-primary" onclick="createSave(${tableId}, ${taskid})">Guardar cambios</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+
+            document.getElementById("table").appendChild(document.createElement("div")).innerHTML = modalContent;
+
+            let myModal = new bootstrap.Modal(document.getElementById('myModal'));
+            myModal.show();
         }
     }
 }
 
-// Variables para la edición de tareas
-let editingTableId = null;
-let editingTaskId = null;
 
-// Función para abrir el modal de edición de tareas
-function openModal(tableId, taskId) {
-    const tableA = tables.find(t => t.id === tableId);
-    const taskB = tableA ? tableA.tasks.find(c => c.id === taskId) : null;
 
-    if (tableA && taskB) {
-        editingTableId = tableId;
-        editingTaskId = taskId;
-
-        document.getElementById("taskaZ").value = taskB.name;
-        document.getElementById("descripcióA").value = taskB.description;
-
-        var myModal = new bootstrap.Modal(document.getElementById('myModal'));
-        myModal.show();
+function createCancer() {
+    const modalElement = document.getElementById('myModal');
+    const modalInstance = bootstrap.Modal.getInstance(modalElement);
+    
+    if (modalInstance) {
+        modalInstance.dispose();
     }
+    
+    modalElement.remove(); 
 }
 
-// Función para guardar los cambios de una tarea desde el modal
-function saveTaskChanges() {
-    const username = localStorage.getItem('username');
-    if (!username) {
-        alert('Por favor, inicia sesión primero.');
-        return;
+
+function createSave(tableId, taskid) {
+    const tableB = tables.find(t => t.id === tableId);
+    const taskB = tableB.tasks.find(c => c.id === taskid);
+
+    let taskName = document.getElementById("taskaZ").value;
+    let taskDescription = document.getElementById("descripcióA").value;
+    let selectedTableId = parseInt(document.getElementById("tableSelect").value);
+
+    taskB.name = taskName;
+    taskB.description = taskDescription;
+
+    if (selectedTableId !== tableId) {
+        const newTable = tables.find(t => t.id === selectedTableId);
+        if (newTable) {
+            tableB.tasks = tableB.tasks.filter(t => t.id !== taskid);
+
+            newTable.tasks.push(taskB);
+        }
     }
 
-    if (editingTableId === null || editingTaskId === null) {
-        alert('No se ha seleccionado una tarea para editar.');
-        return;
-    }
+    const modalElement = document.getElementById('myModal');
+    const modalInstance = bootstrap.Modal.getInstance(modalElement);
+    modalInstance.hide();
 
-    const taskName = document.getElementById("taskaZ").value.trim();
-    const taskDescription = document.getElementById("descripcióA").value.trim();
-
-    if (!taskName) {
-        alert('El nombre de la tarea no puede estar vacío.');
-        return;
-    }
-
-    const tableA = tables.find(t => t.id === editingTableId);
-    const taskB = tableA ? tableA.tasks.find(c => c.id === editingTaskId) : null;
-
-    if (tableA && taskB) {
-        taskB.name = taskName;
-        taskB.description = taskDescription;
-
-        actualizarTablasUsuario(username, tables)
-            .then(() => {
-                console.log("Tarea modificada correctamente");
-                renderTables(); // Actualizar la interfaz
-                // Cerrar el modal
-                var myModal = bootstrap.Modal.getInstance(document.getElementById('myModal'));
-                myModal.hide();
-            })
-            .catch((error) => {
-                console.error(error);
-                alert(error);
-            });
-    }
+    actualizarTablasUsuario(currentUser, tables)
+        .then(() => {
+            alert("Tarea modificada correctamente");
+            renderTables();
+        })
+        .catch((error) => {
+            console.error(error);
+            alert(error);
+        });
 }
-
-// Función para cerrar el modal manualmente (si se necesita)
-function closeModal() {
-    var myModal = bootstrap.Modal.getInstance(document.getElementById('myModal'));
-    myModal.hide();
-}
-
-// Opcional: Función para cerrar sesión
-function logout() {
-    localStorage.removeItem('username');
-    currentUser = null;
-    tables = [];
-    renderTables();
-    alert('Has cerrado sesión.');
-}
-
-// Opcional: Añadir un botón de logout en el header
-// Puedes añadir el siguiente código en el HTML dentro del header
-/*
-<button class="btn btn-outline-light btn-lg ms-2" type="button" onclick="logout()">Cerrar sesión</button>
-*/
-
