@@ -85,6 +85,11 @@ const iniciarSesion = (username, password) => {
             if (user) {
                 if (user.password === password) {
                     localStorage.setItem('username', username);
+
+                    document.getElementById("is").style.display = 'none';
+                    document.getElementById("usernameDisplay").innerText = username;
+                    document.getElementById("logoutButton").style.display = 'inline-block';
+
                     resolve('Inicio de sesión exitoso');
                     closeForm();
                 } else {
@@ -100,6 +105,22 @@ const iniciarSesion = (username, password) => {
         };
     });
 };
+
+
+function logout() {
+    currentUser = null;
+    localStorage.removeItem('username');
+    document.getElementById("is").style.display = 'inline-block';
+    document.getElementById("usernameDisplay").innerText = '';
+    document.getElementById("logoutButton").style.display = 'none';
+
+   
+    const tableContainer = document.getElementById("table");
+    tableContainer.innerHTML = ''; 
+
+
+    alert('Has cerrado sesión.');
+}
 
 
 document.getElementById("login").addEventListener("click", function() {
@@ -492,11 +513,4 @@ function createSave(tableId, taskid) {
             alert(error);
         });
 }
-
-
-// Opcional: Añadir un botón de logout en el header
-// Puedes añadir el siguiente código en el HTML dentro del header
-/*
-<button class="btn btn-outline-light btn-lg ms-2" type="button" onclick="logout()">Cerrar sesión</button>
-*/
 
