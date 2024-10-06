@@ -29,13 +29,16 @@
                 <div class="collapse navbar-collapse" id="navbarColor01">                    
                 </div>                 
                 <form>
-                    <button class="btn btn-outline-light btn-lg" id="is" type="button" onclick="openForm()">Iniciar sessió</button>
-                </form>            
-            </div>
-            <div class="collapse navbar-collapse" id="navbarColor01">
-                <button class="btn btn-outline-light btn-lg ms-2" id="logoutButton" 
-                    style="display: none;" type="button" onclick="logoutForm()"></button>
-            </div>
+                    <button class="btn btn-outline-light btn-lg" id="is" type="button" 
+                    onclick="openForm()">Iniciar sessió</button>
+                </form>
+                <form>
+                    <div class="collapse navbar-collapse" id="navbarColor01">
+                        <button class="btn btn-outline-light btn-lg ms-2" id="logoutButton" 
+                            style="display: none;" type="button" onclick="logoutForm()"></button>
+                    </div>    
+                </form>                
+            </div>   
         </nav>   
     </header>
 
@@ -55,12 +58,12 @@
     </div>    
 
 
-    <div class="form-popup" id="lgout">
-        <form action="/action_page.php" class="form-container">
-            <button class="btn btn-danger btn-lg" id="logoutButton" style="display: none;" 
-                type="button" onclick="logout()">Cerrar sesión</button>
+    <div class="form-popup" id="lgout" style="display: none;">
+        <form class="form-container">
+            <button class="btn btn-danger btn-lg" id="tancar" type="button" 
+                onclick="logout()">Cerrar sesión</button>
         </form>
-    </div>   
+    </div>  
 
     <div  class="input-group mb-3 px-3"  id="mydiv">
         <input type="text" class="form-control" placeholder="Nom de la taula" id="nameA">

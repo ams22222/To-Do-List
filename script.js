@@ -41,6 +41,11 @@ const agregarUser = (username, password) => {
             resolve('Nuevo usuario añadido');
             localStorage.setItem('username', username);
             currentUser = username;
+
+            document.getElementById("is").style.display = 'none';
+            document.getElementById("logoutButton").innerText = username;
+            document.getElementById("logoutButton").style.display = 'inline-block';
+
             closeForm();
         };
 
@@ -87,7 +92,7 @@ const iniciarSesion = (username, password) => {
                     localStorage.setItem('username', username);
 
                     document.getElementById("is").style.display = 'none';
-                    document.getElementById("usernameDisplay").innerText = username;
+                    document.getElementById("logoutButton").innerText = username;
                     document.getElementById("logoutButton").style.display = 'inline-block';
 
                     resolve('Inicio de sesión exitoso');
@@ -111,14 +116,13 @@ function logout() {
     currentUser = null;
     localStorage.removeItem('username');
     document.getElementById("is").style.display = 'inline-block';
-    document.getElementById("usernameDisplay").innerText = '';
     document.getElementById("logoutButton").style.display = 'none';
 
    
     const tableContainer = document.getElementById("table");
     tableContainer.innerHTML = ''; 
 
-
+    closelogoutForm();
     alert('Has cerrado sesión.');
 }
 
@@ -235,6 +239,15 @@ function openForm() {
 
 function closeForm() {
     document.getElementById("myForm").style.display = "none";
+}
+
+
+function logoutForm() {
+    document.getElementById("lgout").style.display = "block";
+}
+
+function closelogoutForm() {
+    document.getElementById("lgout").style.display = "none";
 }
 
 
@@ -513,4 +526,3 @@ function createSave(tableId, taskid) {
             alert(error);
         });
 }
-
