@@ -234,7 +234,18 @@ function createTable() {
         return;
     }
 
-    tableIdCounter = tables.length;
+
+    let maxId = 0;
+
+    if (tables.length > 0) {
+        tables.forEach((table) => {
+            if (table.id > maxId) {
+                maxId = table.id;
+            }
+        });
+        tableIdCounter=maxId+1;
+    }
+
 
     const nametable = document.getElementById("nameA").value.trim();
     
@@ -269,11 +280,24 @@ function createTask(tableId) {
         return;
     }
 
-    const nametask = document.getElementById(`nameB-${tableId}`).value.trim();
+    taskIdCounter=0;
+    let maxId = 0;
+
     const tableA = tables.find(t => t.id === tableId);
 
-    taskIdCounter = tables[tableId].tasks.length;
+    if (tableA.tasks.length > 0) {
+        tableA.tasks.forEach((task) => {
+            if (task.id > maxId) {
+                maxId = task.id;
+            }
+        });
+        taskIdCounter=maxId+1;
+    }
 
+    console.log(maxId);
+    console.log(taskIdCounter);
+
+    const nametask = document.getElementById(`nameB-${tableId}`).value.trim();
 
     if (nametask && tableA) {
         let taskB = {
@@ -323,14 +347,14 @@ function createEliminate(tableId, taskId) {
     }
 
     const tableA = tables.find(t => t.id === tableId);
-
     if (tableA) {
         const taskElement = document.getElementById(`td-${tableId}-${taskId}`);
+
         if (taskElement) {
             if (confirm("¿Estás seguro de eliminar esta tarea?")) {
                 taskElement.remove();
                 tableA.tasks = tableA.tasks.filter(t => t.id !== taskId);
-                actualizarTablasUsuario(username, tables)
+                actualizarTablasUsuario(currentUser, tables)
                     .then(() => {
                         console.log("Tarea eliminada correctamente");
                     })
@@ -343,10 +367,10 @@ function createEliminate(tableId, taskId) {
     }
 }
 
-// Función para eliminar una tabla
+
+
 function eliminateTable(tableId) {
-    const username = localStorage.getItem('username');
-    if (!username) {
+    if (!currentUser) {
         alert('Por favor, inicia sesión primero.');
         return;
     }
@@ -357,7 +381,7 @@ function eliminateTable(tableId) {
         if (confirm("¿Estás seguro de eliminar esta tabla?")) {
             tableElement.remove();
             tables = tables.filter(t => t.id !== tableId);
-            actualizarTablasUsuario(username, tables)
+            actualizarTablasUsuario(currentUser, tables)
                 .then(() => {
                     console.log("Tabla eliminada correctamente");
                 })
