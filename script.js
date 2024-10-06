@@ -400,44 +400,50 @@ function createEliminate(tableId, taskId) {
 
 
 function modal(tableId, taskid) {
-    const existingModal = document.getElementById('myModal');
-    if (existingModal) {
-        existingModal.remove();
-    }
-
     const tableB = tables.find(t => t.id === tableId);
     const taskB = tableB.tasks.find(c => c.id === taskid);
-    let col = taskB.description;
-    let namet = taskB.name;
+    let description = taskB.description;
+    let taskName = taskB.name;
 
-    if(tableB) {
+    let tableOptions = tables.map(t => 
+        `<option value="${t.id}" ${t.id === tableId ? 'selected' : ''}>${t.name}</option>`
+    ).join('');
+
+    if (tableB) {
         const taskElementB = document.getElementById(`td-${tableId}-${taskid}`);
         if (taskElementB) {
-            let ros = document.createElement("div");
-            ros.innerHTML =
-                `<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+            let modalContent = `
+                <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <input type="text" class="form-control" placeholder="Nom de la tasca" id="taskaZ" value="${namet}">
+                                <input type="text" class="form-control" placeholder="Nombre de la tarea" id="taskaZ" value="${taskName}">
                             </div>
                             <div class="input-group">
-                                <textarea class="form-control" aria-label="With textarea" placeholder="Descripció" id="descripcióA" rows="10">${col}</textarea>
+                                <textarea class="form-control" aria-label="With textarea" placeholder="Descripción" id="descripcióA" rows="10">${description}</textarea>
+                            </div>
+                            <div class="input-group mt-3">
+                                <label for="tableSelect" class="form-label">Mover a tabla:</label>
+                                <select class="form-select" id="tableSelect">
+                                    ${tableOptions}
+                                </select>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" onclick="createCancer()" data-bs-dismiss="modal">Tancar</button>
-                                <button type="button" class="btn btn-primary" onclick="createSave(${tableId}, ${taskid})">Guardar canvis</button>
+                                <button type="button" class="btn btn-secondary" onclick="createCancer()" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-primary" onclick="createSave(${tableId}, ${taskid})">Guardar cambios</button>
                             </div>
                         </div>
                     </div>
                 </div>`;
-                
-            document.getElementById("table").appendChild(ros);
-            var myModal = new bootstrap.Modal(document.getElementById('myModal'));
+
+            document.getElementById("table").appendChild(document.createElement("div")).innerHTML = modalContent;
+
+            let myModal = new bootstrap.Modal(document.getElementById('myModal'));
             myModal.show();
         }
     }
 }
+
 
 
 function createCancer() {
@@ -456,27 +462,29 @@ function createSave(tableId, taskid) {
     const tableB = tables.find(t => t.id === tableId);
     const taskB = tableB.tasks.find(c => c.id === taskid);
 
-    let rem = document.getElementById("taskaZ").value;
-    taskB.name = rem;
-    let ram = document.getElementById("descripcióA").value;
-    taskB.description = ram;
+    let taskName = document.getElementById("taskaZ").value;
+    let taskDescription = document.getElementById("descripcióA").value;
+    let selectedTableId = parseInt(document.getElementById("tableSelect").value);
+
+    taskB.name = taskName;
+    taskB.description = taskDescription;
+
+    if (selectedTableId !== tableId) {
+        const newTable = tables.find(t => t.id === selectedTableId);
+        if (newTable) {
+            tableB.tasks = tableB.tasks.filter(t => t.id !== taskid);
+
+            newTable.tasks.push(taskB);
+        }
+    }
 
     const modalElement = document.getElementById('myModal');
     const modalInstance = bootstrap.Modal.getInstance(modalElement);
-
-    if (modalInstance) {
-        modalInstance.hide();  
-        modalInstance.dispose();
-    }
-
-    if (modalElement) {
-        modalElement.remove();
-    }
-
+    modalInstance.hide();
 
     actualizarTablasUsuario(currentUser, tables)
         .then(() => {
-            alert("Tasca modificada correctament");
+            alert("Tarea modificada correctamente");
             renderTables();
         })
         .catch((error) => {
@@ -485,66 +493,6 @@ function createSave(tableId, taskid) {
         });
 }
 
-
-
-
-// // Función para guardar los cambios de una tarea desde el modal
-// function saveTaskChanges() {
-//     const username = localStorage.getItem('username');
-//     if (!username) {
-//         alert('Por favor, inicia sesión primero.');
-//         return;
-//     }
-
-//     if (editingTableId === null || editingTaskId === null) {
-//         alert('No se ha seleccionado una tarea para editar.');
-//         return;
-//     }
-
-//     const taskName = document.getElementById("taskaZ").value.trim();
-//     const taskDescription = document.getElementById("descripcióA").value.trim();
-
-//     if (!taskName) {
-//         alert('El nombre de la tarea no puede estar vacío.');
-//         return;
-//     }
-
-//     const tableA = tables.find(t => t.id === editingTableId);
-//     const taskB = tableA ? tableA.tasks.find(c => c.id === editingTaskId) : null;
-
-//     if (tableA && taskB) {
-//         taskB.name = taskName;
-//         taskB.description = taskDescription;
-
-//         actualizarTablasUsuario(username, tables)
-//             .then(() => {
-//                 console.log("Tarea modificada correctamente");
-//                 renderTables(); // Actualizar la interfaz
-//                 // Cerrar el modal
-//                 var myModal = bootstrap.Modal.getInstance(document.getElementById('myModal'));
-//                 myModal.hide();
-//             })
-//             .catch((error) => {
-//                 console.error(error);
-//                 alert(error);
-//             });
-//     }
-// }
-
-// // Función para cerrar el modal manualmente (si se necesita)
-// function closeModal() {
-//     var myModal = bootstrap.Modal.getInstance(document.getElementById('myModal'));
-//     myModal.hide();
-// }
-
-// // Opcional: Función para cerrar sesión
-// function logout() {
-//     localStorage.removeItem('username');
-//     currentUser = null;
-//     tables = [];
-//     renderTables();
-//     alert('Has cerrado sesión.');
-// }
 
 // Opcional: Añadir un botón de logout en el header
 // Puedes añadir el siguiente código en el HTML dentro del header
