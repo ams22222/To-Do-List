@@ -42,6 +42,8 @@ const agregarUser = (username, password) => {
             localStorage.setItem('username', username);
             currentUser = username;
 
+            crearTablasPredeterminadas();
+
             document.getElementById("is").style.display = 'none';
             document.getElementById("logoutButton").innerText = username;
             document.getElementById("logoutButton").style.display = 'inline-block';
@@ -54,6 +56,21 @@ const agregarUser = (username, password) => {
         };
     });
 };
+
+
+function crearTablasPredeterminadas() {
+    if(tables.length===0){
+        const defaultTables = ["Pendents", "En producció", "Acabades"];
+
+        defaultTables.forEach((tableName) => {
+            document.getElementById("nameA").value = tableName;
+            createTable();
+        });
+    
+        document.getElementById("nameA").value = '';  
+        renderTables();
+    }
+}
 
 
 const cargarTablasUsuario = (username) => {
@@ -122,6 +139,7 @@ function logout() {
     const tableContainer = document.getElementById("table");
     tableContainer.innerHTML = ''; 
 
+    tables=[];
     closelogoutForm();
     alert('Has cerrado sesión.');
 }
