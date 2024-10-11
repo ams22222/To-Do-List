@@ -497,17 +497,20 @@ function modal(tableId, taskid) {
 }
 
 
-
 function createCancer() {
     const modalElement = document.getElementById('myModal');
+    
+    modalElement.addEventListener('hidden.bs.modal', () => {
+        modalElement.remove();
+        document.body.classList.remove('modal-open');
+    });
+
     const modalInstance = bootstrap.Modal.getInstance(modalElement);
-    
     if (modalInstance) {
-        modalInstance.dispose();
+        modalInstance.hide();
     }
-    
-    modalElement.remove(); 
 }
+
 
 
 function createSave(tableId, taskid) {
