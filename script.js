@@ -24,7 +24,7 @@ const abrirBaseDatos = () => {
         };
 
         request.onerror = (event) => {
-            reject('Error al abrir la base de datos: ' + event.target.error);
+            reject('Error a l\'obrir la base de dades: ' + event.target.error);
         };
     });
 };
@@ -38,7 +38,7 @@ const agregarUser = (username, password) => {
 
         const request = objectStore.add(user);
         request.onsuccess = () => {
-            resolve('Nuevo usuario añadido');
+            resolve('Nou usuari afegit');
             localStorage.setItem('username', username);
             currentUser = username;
 
@@ -52,7 +52,7 @@ const agregarUser = (username, password) => {
         };
 
         request.onerror = (event) => {
-            reject('Error al agregar usuario: ' + event.target.error);
+            reject('Error a l\'afegir usuari: ' + event.target.error);
         };
     });
 };
@@ -84,12 +84,12 @@ const cargarTablasUsuario = (username) => {
             if (user) {
                 resolve(user.tables);
             } else {
-                reject('Usuario no encontrado');
+                reject('Usuari no trobat');
             }
         };
 
         request.onerror = (event) => {
-            reject('Error al cargar las tablas: ' + event.target.error);
+            reject('Error al carregar les llistes: ' + event.target.error);
         };
     });
 };
@@ -112,18 +112,18 @@ const iniciarSesion = (username, password) => {
                     document.getElementById("logoutButton").innerText = username;
                     document.getElementById("logoutButton").style.display = 'inline-block';
 
-                    resolve('Inicio de sesión exitoso');
+                    resolve('Inici de sessió exitós');
                     closeForm();
                 } else {
-                    reject('Contraseña incorrecta');
+                    reject('Contrasenya incorrecte');
                 }
             } else {
-                reject('Usuario no registrado');
+                reject('Usuari no registrat');
             }
         };
 
         request.onerror = (event) => {
-            reject('Error al verificar usuario: ' + event.target.error);
+            reject('Error al verificar l\'usuari: ' + event.target.error);
         };
     });
 };
@@ -141,7 +141,7 @@ function logout() {
 
     tables=[];
     closelogoutForm();
-    alert('Has cerrado sesión.');
+    alert('Has tancat sessió.');
 }
 
 
@@ -166,8 +166,8 @@ document.getElementById("login").addEventListener("click", function() {
                         });
                 })
                 .catch((error) => {
-                    if (error === 'Usuario no registrado') {
-                        if (confirm('Usuario no registrado. ¿Quieres crear una nueva cuenta?')) {
+                    if (error === 'Usuari no registrat') {
+                        if (confirm('Usuari no registrat. Vols crear una nova compte?')) {
                             agregarUser(username, password)
                                 .then((mensaje) => {
                                     alert(mensaje);
@@ -185,7 +185,7 @@ document.getElementById("login").addEventListener("click", function() {
             alert(error);
         });
     } else {
-        alert('Por favor, introduce un nombre de usuario y contraseña válidos.');
+        alert('Siusplau, introdueix un nom d\'usuari i contrasenya vàlids.');
     }
 });
 
@@ -206,16 +206,16 @@ function renderTables() {
             <h3>${tableA.name}</h3>
 
             <div class="input-group mb-3">
-                <input type="text" class="form-control tascaB" placeholder="Tarea" id="nameB-${index}">
-                <button type="button" class="btn btn-success" onclick="createTask(${index})">Crear tarea</button>
+                <input type="text" class="form-control tascaB" placeholder="Tasca" id="nameB-${index}">
+                <button type="button" class="btn btn-success" onclick="createTask(${index})">Crear tasca</button>
                 <button type="button" class="btn btn-danger" onclick="eliminateTable(${index})">Eliminar</button>
             </div>
 
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col">Tareas</th>
-                        <th scope="col">Acciones</th>
+                        <th scope="col">Tasques</th>
+                        <th scope="col">Accions</th>
                     </tr>
                 </thead>
                 <tbody id="taskA-${index}">
@@ -281,18 +281,18 @@ const actualizarTablasUsuario = (username, tables) => {
                 user.tables = tables;
                 const updateRequest = objectStore.put(user);
                 updateRequest.onsuccess = () => {
-                    resolve('Tablas actualizadas correctamente');
+                    resolve('Llistes actualitzades correctament');
                 };
                 updateRequest.onerror = (event) => {
-                    reject('Error al actualizar las tablas: ' + event.target.error);
+                    reject('Error a l\'actualizar les llistes: ' + event.target.error);
                 };
             } else {
-                reject('Usuario no encontrado');
+                reject('Usuari no definit');
             }
         };
 
         request.onerror = (event) => {
-            reject('Error al obtener el usuario: ' + event.target.error);
+            reject('Error a l\'obtenir l\'usuari: ' + event.target.error);
         };
     });
 };
@@ -301,7 +301,7 @@ const actualizarTablasUsuario = (username, tables) => {
 
 function createTable() {
     if (!currentUser) {
-        alert('Por favor, inicia sesión primero.');
+        alert('Siusplau, inicia sessió primer.');
         return;
     }
 
@@ -331,7 +331,7 @@ function createTable() {
 
         actualizarTablasUsuario(currentUser, tables)
             .then(() => {
-                console.log('Tabla creada y guardada en IndexedDB');
+                console.log('Llista creada i guardada en IndexedDB');
                 renderTables();
                 document.getElementById("nameA").value = '';
             })
@@ -340,14 +340,14 @@ function createTable() {
                 alert(error);
             });
     } else {
-        alert("Introduce un nombre válido para la tabla");
+        alert("Introdueix un nom vàlid per a la llista");
     }
 }
 
 
 function createTask(tableId) {
     if (!currentUser) {
-        alert('Por favor, inicia sesión primero.');
+        alert('Siusplau, inicia sessió primer.');
         return;
     }
 
@@ -381,7 +381,7 @@ function createTask(tableId) {
 
         actualizarTablasUsuario(currentUser, tables)
             .then(() => {
-                console.log('Tarea creada y guardada en IndexedDB');
+                console.log('Tasca creada i guardada en IndexedDB');
                 renderTask(tableId, taskB);
                 document.getElementById(`nameB-${tableId}`).value = '';
             })
@@ -390,7 +390,7 @@ function createTask(tableId) {
                 alert(error);
             });
     } else {
-        alert("Introduce un nombre válido para la tarea");
+        alert("Introdueix un nom vàlid per a la tasca");
     }
 }
 
@@ -398,19 +398,19 @@ function createTask(tableId) {
 
 function eliminateTable(tableId) {
     if (!currentUser) {
-        alert('Por favor, inicia sesión primero.');
+        alert('Siusplau, inicia sessió primer.');
         return;
     }
 
     const tableElement = document.getElementById(`div-${tableId}`);
 
     if (tableElement) {
-        if (confirm("¿Estás seguro de eliminar esta tabla?")) {
+        if (confirm("Estàs segur d\'eliminar aquesta llista?")) {
             tableElement.remove();
             tables = tables.filter(t => t.id !== tableId);
             actualizarTablasUsuario(currentUser, tables)
                 .then(() => {
-                    console.log("Tabla eliminada correctamente");
+                    console.log("Llista eliminada correctament");
                 })
                 .catch((error) => {
                     console.error(error);
@@ -424,7 +424,7 @@ function eliminateTable(tableId) {
 
 function createEliminate(tableId, taskId) {
     if (!currentUser) {
-        alert('Por favor, inicia sesión primero.');
+        alert('Siusplau, inicia sessió primer.');
         return;
     }
 
@@ -433,12 +433,12 @@ function createEliminate(tableId, taskId) {
         const taskElement = document.getElementById(`td-${tableId}-${taskId}`);
 
         if (taskElement) {
-            if (confirm("¿Estás seguro de eliminar esta tarea?")) {
+            if (confirm("Estàs segur d\'eliminar aquesta tasca?")) {
                 taskElement.remove();
                 tableA.tasks = tableA.tasks.filter(t => t.id !== taskId);
                 actualizarTablasUsuario(currentUser, tables)
                     .then(() => {
-                        console.log("Tarea eliminada correctamente");
+                        console.log("Tasca eliminada correctament");
                     })
                     .catch((error) => {
                         console.error(error);
@@ -469,20 +469,20 @@ function modal(tableId, taskid) {
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <input type="text" class="form-control" placeholder="Nombre de la tarea" id="taskaZ" value="${taskName}">
+                                <input type="text" class="form-control" placeholder="Nom de la tasca" id="taskaZ" value="${taskName}">
                             </div>
                             <div class="input-group">
-                                <textarea class="form-control" aria-label="With textarea" placeholder="Descripción" id="descripcióA" rows="10">${description}</textarea>
+                                <textarea class="form-control" aria-label="With textarea" placeholder="Descripció" id="descripcióA" rows="10">${description}</textarea>
                             </div>
                             <div class="input-group mt-3">
-                                <label for="tableSelect" class="form-label">Mover a tabla:</label>
+                                <label for="tableSelect" class="form-label">Moure a llista:</label>
                                 <select class="form-select" id="tableSelect">
                                     ${tableOptions}
                                 </select>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" onclick="createCancer()" data-bs-dismiss="modal">Cerrar</button>
-                                <button type="button" class="btn btn-primary" onclick="createSave(${tableId}, ${taskid})">Guardar cambios</button>
+                                <button type="button" class="btn btn-secondary" onclick="createCancer()" data-bs-dismiss="modal">Tancar</button>
+                                <button type="button" class="btn btn-primary" onclick="createSave(${tableId}, ${taskid})">Guardar canvis</button>
                             </div>
                         </div>
                     </div>
@@ -539,7 +539,7 @@ function createSave(tableId, taskid) {
 
     actualizarTablasUsuario(currentUser, tables)
         .then(() => {
-            alert("Tarea modificada correctamente");
+            alert("Tasca modificada correctament");
             renderTables();
         })
         .catch((error) => {

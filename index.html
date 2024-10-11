@@ -44,16 +44,16 @@
 
     <div class="form-popup" id="myForm">
         <form action="/action_page.php" class="form-container">
-            <h1>Login</h1>
+            <h1>Inici de sessió</h1>
             
-            <label for="username"><b>User</b></label> 
-            <input type="text" placeholder="Nombre de usuario" name="username" id="username" required>
+            <label for="username"><b>Usuari</b></label> 
+            <input type="text" placeholder="Nom d'usuari" name="username" id="username" required>
               
-            <label for="psw"><b>Password</b></label>
-            <input type="password" placeholder="Contraseña" name="psw" id="psw" required>
+            <label for="psw"><b>Contrasenya</b></label>
+            <input type="password" placeholder="Contrasenya" name="psw" id="psw" required>
               
-            <button type="button" id="login" class="btn">Login</button>
-            <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+            <button type="button" id="login" class="btn">Entrar</button>
+            <button type="button" class="btn cancel" onclick="closeForm()">Tancar</button>
         </form>
     </div>    
 
@@ -61,12 +61,12 @@
     <div class="form-popup" id="lgout" style="display: none;">
         <form class="form-container">
             <button class="btn btn-danger btn-lg" id="tancar" type="button" 
-                onclick="logout()">Cerrar sesión</button>
+                onclick="logout()">Tancar sessió</button>
         </form>
     </div>  
 
     <div  class="input-group mb-3 px-3"  id="mydiv">
-        <input type="text" class="form-control" placeholder="Nom de la taula" id="nameA">
+        <input type="text" class="form-control" placeholder="Nom de la llista" id="nameA">
         <button type="button" class="btn btn-success" id="basic-addon2" onclick="createTable()">Crear llista</button>
     </div>
 
