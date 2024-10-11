@@ -218,7 +218,7 @@ function renderTables() {
         dove.setAttribute("id", `div-${index}`);
         dove.classList.add("col-md-4", "border", "p-3", "mb-4", "rounded");
         dove.innerHTML = `
-            <h3>${tableA.name}</h3>
+            <h3 style="word-break: break-word;">${tableA.name}</h3>
 
             <div class="input-group mb-3">
                 <input type="text" class="form-control tascaB" placeholder="Tasca" id="nameB-${index}">
