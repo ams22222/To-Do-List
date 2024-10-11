@@ -254,7 +254,7 @@ function renderTask(tableId, taskB) {
     let dit = document.createElement("tr");
     dit.setAttribute("id", `td-${tableId}-${taskB.id}`);
     dit.innerHTML = `
-        <td>${taskB.name}</td>
+        <td style="word-break: break-word;">${taskB.name}</td>
         <td>
             <button type="button" class="btn btn-danger btn-sm" onclick="createEliminate(${tableId}, ${taskB.id})">Eliminar</button>
             <button type="button" class="btn btn-primary btn-sm" onclick="modal(${tableId}, ${taskB.id})">Editar</button>
