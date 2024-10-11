@@ -18,144 +18,120 @@
 
 </head>
 
-        <body>
-            <header id="header">
-                <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-                    <div class="container-fluid">
-                        <a class="navbar-brand" href="#">
-                            <img src="imatges/unnamed.jpg" alt="" width="75px" height="55px" class="d-inline-block align-text-top">
-                        </a>
-                        <div class="collapse navbar-collapse" id="navbarColor01">
-                            <div class="container-fluid">
-                                <span class="navbar-brand mb-0 h1">Home</span>
-                            </div>
-                            <form>
-                                <button class="btn btn-outline-light btn-lg" id="is" type="button" onclick="openForm()">Iniciar sessió</button>
-                            </form>
-                        </div>
-                    </div>
-                </nav>
-            </header>
-
-
-            <div class="form-popup" id="myForm">
-                <form action="/action_page.php" class="form-container">
-                  <h1>Login</h1>
-              
-                  <label for="username"><b>User</b></label>
-                  <input type="text" placeholder="Nombre de usuario" name="username" id="username" required>
-              
-                  <label for="psw"><b>Password</b></label>
-                  <input type="password" placeholder="Contraseña" name="psw" id="psw" required>
-              
-                  <button type="button" id="login" class="btn">Login</button>
-                  <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+<body>
+    
+    <header id="header">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">             
+            <div class="container-fluid">                       
+                <a class="navbar-brand" href="#">
+                    <img src="imatges/unnamed.jpg" alt="" width="75px" height="55px" class="d-inline-block align-text-top">
+                </a>                    
+                <div class="collapse navbar-collapse" id="navbarColor01">                    
+                </div>                 
+                <form>
+                    <button class="btn btn-outline-light btn-lg" id="is" type="button" 
+                    onclick="openForm()">Iniciar sessió</button>
                 </form>
-            </div>
+                <form>
+                    <div class="collapse navbar-collapse" id="navbarColor01">
+                        <button class="btn btn-outline-light btn-lg ms-2" id="logoutButton" 
+                            style="display: none;" type="button" onclick="logoutForm()"></button>
+                    </div>    
+                </form>                
+            </div>   
+        </nav>   
+    </header>
 
+    <div class="form-popup" id="myForm">
+        <form action="/action_page.php" class="form-container">
+            <h1>Login</h1>
+            
+            <label for="username"><b>User</b></label> 
+            <input type="text" placeholder="Nombre de usuario" name="username" id="username" required>
+              
+            <label for="psw"><b>Password</b></label>
+            <input type="password" placeholder="Contraseña" name="psw" id="psw" required>
+              
+            <button type="button" id="login" class="btn">Login</button>
+            <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+        </form>
+    </div>    
+
+
+    <div class="form-popup" id="lgout" style="display: none;">
+        <form class="form-container">
+            <button class="btn btn-danger btn-lg" id="tancar" type="button" 
+                onclick="logout()">Cerrar sesión</button>
+        </form>
+    </div>  
 
     <div  class="input-group mb-3 px-3"  id="mydiv">
-
-        <input type="text" class="form-control" placeholder="Nom de la taula" id="nameA" >
-        
-        <button type="button" class="btn btn-success" id="basic-addon2"
-        onclick="createTable()">Crear llista
-        </button>
-    
+        <input type="text" class="form-control" placeholder="Nom de la taula" id="nameA">
+        <button type="button" class="btn btn-success" id="basic-addon2" onclick="createTable()">Crear llista</button>
     </div>
 
     <div class="container">
-
-        <div id="table" class="row">
-
-        </div>
-
+        <div id="table" class="row"></div>
     </div>
 
     <footer class="bg-light text-center " id="myfooter">
-
         <div class="container p-4">
-  
             <section class="mb-4">
-
                 <p>
                     Aquesta aplicació està sota la tutela de specialisterner i fundesplai,
                     qualsevol dubte o reclamació acudir a qualsevol dels dos associats.
                 </p>
-
             </section>
-
             <section class="">
-
                 <div class="row">
-
                     <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-
                         <h5 class="text-uppercase">GRÀCIES ESPECIALS</h5>
-  
                         <ul class="list-unstyled mb-0">
-
                             <a href="https://github.com/" class="text-dark">
                             <img src="imatges/GitHub-Emblem(1).png" width="150" height=""></a>
-        
                         </ul>
-
                     </div>
-           
-                    <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-            
+                    <div class="col-lg-3 col-md-6 mb-4 mb-md-0">           
                         <h5 class="text-uppercase">ASSOCIATS</h5>
-  
                         <ul class="list-unstyled mb-0">
-
                             <a href="https://fundesplai.org/" class="text-dark">
                             <img src=imatges/fundesplai-logo-web(1).png width="200" height=""></a>
-        
                         </ul>
-
                     </div>
-
-                    <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-                        
+                    <div class="col-lg-3 col-md-6 mb-4 mb-md-0">     
                         <h5 class="text-uppercase">ASSOCIATS</h5>
-  
                         <ul class="list-unstyled mb-0">
-
                             <a href="https://specialisternespain.com/" class="text-dark">
                             <img src="imatges/sp-logo-20th-vect.svg" width="200" height=""></a>
-                
                         </ul>
-
                     </div>
-
                     <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-
                         <h5 class="text-uppercase">GRÀCIES ESPECIALS</h5>
-  
                         <ul class="list-unstyled mb-0">
-
                             <a href="https://openai.com/chatgpt/" class="text-dark">
                             <img src="imatges/chatgpt-logo-icon-artificial-intelligence-vector-47106879(1).jpg" width="200" height=""></a>
-        
                         </ul>
-
                     </div>
-
                 </div>
-
             </section>
-  
         </div>
-  
         <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
-
             © 2024 Copyright:
             <a class="text-dark" href="https://steamcommunity.com/profiles/76561198275233697">JAYR OWNER</a>
             <a>&</a>
             <a class="text-dark" href="https://steamcommunity.com/id/FinneVonKleinert">CO-OWNER</a>
-        
+            <a>&</a>
+            <a class="text-dark" href="https://steamcommunity.com/profiles/76561198326995344">PROJECT-MANAGER</a>
+            <a>&</a>
+            <a class="text-dark" href="https://steamcommunity.com/profiles/76561198834008904/">SOFTWARE-DEVELOPER</a>
+            <p>
+            <a>TOT AMB LA VOLUNTAT DE DÉU, </a>
+            <a class="text-dark" href="https://es.wikipedia.org/wiki/Deus_vult">DEUS VULT!</a>
+            </p>
+            <p>
+                <img src="imatges/deus_vult_by_theocrata-daxazpj.png" width="100">
+            </p>
         </div>
-  
     </footer>
 
     <script src="script.js"></script>
