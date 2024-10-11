@@ -32,11 +32,12 @@ const abrirBaseDatos = () => {
 
 const agregarUser = (username, password) => {
     return new Promise((resolve, reject) => {
+        const newPassword = simpleHashPassword(password);
         const transaction = db.transaction(['users'], 'readwrite');
         const objectStore = transaction.objectStore('users');
-        const user = { username, password, tables: [] };
+        const user = { username, password: newPassword, tables: [] };
 
-        const request = objectStore.add(user);
+        const request = objectStore.add(user); 
         request.onsuccess = () => {
             resolve('Nou usuari afegit');
             localStorage.setItem('username', username);
@@ -56,6 +57,18 @@ const agregarUser = (username, password) => {
         };
     });
 };
+
+
+function simpleHashPassword(password) {
+    let hash = 0;
+    for (let i = 0; i < password.length; i++) {
+        const char = password.charCodeAt(i);
+        hash += char * (i + 1);
+    }
+
+    return hash.toString(16);
+}
+
 
 
 function crearTablasPredeterminadas() {
@@ -105,7 +118,9 @@ const iniciarSesion = (username, password) => {
         request.onsuccess = (event) => {
             const user = event.target.result;
             if (user) {
-                if (user.password === password) {
+                const hashedPassword = simpleHashPassword(password);
+
+                if (user.password === hashedPassword) {
                     localStorage.setItem('username', username);
 
                     document.getElementById("is").style.display = 'none';
