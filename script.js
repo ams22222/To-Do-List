@@ -35,7 +35,6 @@ const saltRounds = 10;
 
 const agregarUser = (username, password) => {
     return new Promise((resolve, reject) => {
-        // Hashear la contraseña con bcryptjs
         bcrypt.hash(password, saltRounds, (err, hash) => {
             if (err) {
                 reject('Error al hashear la contraseña: ' + err);
@@ -571,3 +570,60 @@ function createSave(tableId, taskid) {
             alert(error);
         });
 }
+
+
+function exportarTablas() {
+    if (!currentUser) {
+        alert('Siusplau, inicia sessió primer.');
+        return;
+    }
+    
+    const dataStr = JSON.stringify(tables, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'tablas.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+document.getElementById('importButton').addEventListener('click', () => {
+    if (!currentUser) {
+        alert('Siusplau, inicia sessió primer.');
+        return;
+    }
+    document.getElementById('fileInput').click();
+});
+
+document.getElementById('fileInput').addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const importedTables = JSON.parse(e.target.result);
+                if (Array.isArray(importedTables)) {
+                    tables = importedTables;
+                    actualizarTablasUsuario(currentUser, tables)
+                        .then(() => {
+                            alert('Tablas importadas correctamente.');
+                            renderTables();
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                            alert('Error al importar las tablas: ' + error);
+                        });
+                } else {
+                    alert('El archivo JSON no contiene una lista de tablas válida.');
+                }
+            } catch (error) {
+                alert('Error al parsear el archivo JSON: ' + error.message);
+            }
+        };
+        reader.readAsText(file);
+    }
+});
