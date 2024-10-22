@@ -476,6 +476,7 @@ function modal(tableId, taskid) {
         `<option value="${t.id}" ${t.id === tableId ? 'selected' : ''}>${t.name}</option>`
     ).join('');
 
+
     if (tableB) {
         const taskElementB = document.getElementById(`td-${tableId}-${taskid}`);
         if (taskElementB) {
@@ -543,6 +544,18 @@ function createSave(tableId, taskid) {
         const newTable = tables.find(t => t.id === selectedTableId);
         if (newTable) {
             tableB.tasks = tableB.tasks.filter(t => t.id !== taskid);
+
+            const existingTask = newTable.tasks.find(t => t.id === taskid);
+            if (existingTask) {
+                let maxId = 0;
+                newTable.tasks.forEach(task => {
+                    if (task.id > maxId) {
+                        maxId = task.id;
+                    }
+                });
+
+                taskB.id = maxId + 1;
+            }
 
             newTable.tasks.push(taskB);
         }
