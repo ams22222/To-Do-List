@@ -203,7 +203,11 @@ function renderTables() {
         dove.setAttribute("id", `div-${index}`);
         dove.classList.add("col-md-4", "border", "p-3", "mb-4", "rounded");
         dove.innerHTML = `
-            <h3>${tableA.name}</h3>
+            
+            <div>
+                <h3>${tableA.name}</h3>
+                <button type="button" class="btn btn-primary" id="rit" onclick="createEdit(${index})">Editar</button>
+            </div>
 
             <div class="input-group mb-3">
                 <input type="text" class="form-control tascaB" placeholder="Tasca" id="nameB-${index}">
@@ -523,6 +527,38 @@ function createSave(tableId, taskid) {
 
     taskB.name = taskName;
     taskB.description = taskDescription;
+
+    if (selectedTableId !== tableId) {
+        const newTable = tables.find(t => t.id === selectedTableId);
+        if (newTable) {
+            tableB.tasks = tableB.tasks.filter(t => t.id !== taskid);
+
+            newTable.tasks.push(taskB);
+        }
+    }
+
+    const modalElement = document.getElementById('myModal');
+    const modalInstance = bootstrap.Modal.getInstance(modalElement);
+    modalInstance.hide();
+
+    actualizarTablasUsuario(currentUser, tables)
+        .then(() => {
+            alert("Tasca modificada correctament");
+            renderTables();
+        })
+        .catch((error) => {
+            console.error(error);
+            alert(error);
+        });
+}
+
+function createEdit(tableId) {
+    let tableC = tables.find(t => t.id === tableId);
+    let nameTableA = document.getElementById("nameA").value;
+    let tableNameA = document.getElementById("rit").value;
+
+    table.name = nameTableA
+    table.description = tableNameA
 
     if (selectedTableId !== tableId) {
         const newTable = tables.find(t => t.id === selectedTableId);
