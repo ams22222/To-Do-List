@@ -30,45 +30,40 @@ const abrirBaseDatos = () => {
 };
 
 
+const bcrypt = dcodeIO.bcrypt;
+const saltRounds = 10;
+
 const agregarUser = (username, password) => {
     return new Promise((resolve, reject) => {
-        const newPassword = simpleHashPassword(password);
-        const transaction = db.transaction(['users'], 'readwrite');
-        const objectStore = transaction.objectStore('users');
-        const user = { username, password: newPassword, tables: [] };
+        // Hashear la contraseña con bcryptjs
+        bcrypt.hash(password, saltRounds, (err, hash) => {
+            if (err) {
+                reject('Error al hashear la contraseña: ' + err);
+                return;
+            }
+            
+            const transaction = db.transaction(['users'], 'readwrite');
+            const objectStore = transaction.objectStore('users');
+            const user = { username, password: hash, tables: [] };
 
-        const request = objectStore.add(user); 
-        request.onsuccess = () => {
-            resolve('Nou usuari afegit');
-            localStorage.setItem('username', username);
-            currentUser = username;
+            const request = objectStore.add(user);
+            request.onsuccess = () => {
+                resolve('Nuevo usuario añadido');
+                localStorage.setItem('username', username);
+                currentUser = username;
+                crearTablasPredeterminadas();
+                document.getElementById("is").style.display = 'none';
+                document.getElementById("logoutButton").innerText = username;
+                document.getElementById("logoutButton").style.display = 'inline-block';
+                closeForm();
+            };
 
-            crearTablasPredeterminadas();
-
-            document.getElementById("is").style.display = 'none';
-            document.getElementById("logoutButton").innerText = username;
-            document.getElementById("logoutButton").style.display = 'inline-block';
-
-            closeForm();
-        };
-
-        request.onerror = (event) => {
-            reject('Error a l\'afegir usuari: ' + event.target.error);
-        };
+            request.onerror = (event) => {
+                reject('Error al agregar usuario: ' + event.target.error);
+            };
+        });
     });
 };
-
-
-function simpleHashPassword(password) {
-    let hash = 0;
-    for (let i = 0; i < password.length; i++) {
-        const char = password.charCodeAt(i);
-        hash += char * (i + 1);
-    }
-
-    return hash.toString(16);
-}
-
 
 
 function crearTablasPredeterminadas() {
@@ -108,7 +103,6 @@ const cargarTablasUsuario = (username) => {
 };
 
 
-
 const iniciarSesion = (username, password) => {
     return new Promise((resolve, reject) => {
         const transaction = db.transaction(['users'], 'readonly');
@@ -118,31 +112,33 @@ const iniciarSesion = (username, password) => {
         request.onsuccess = (event) => {
             const user = event.target.result;
             if (user) {
-                const hashedPassword = simpleHashPassword(password);
+                bcrypt.compare(password, user.password, (err, result) => {
+                    if (err) {
+                        reject('Error al comparar contraseñas: ' + err);
+                        return;
+                    }
 
-                if (user.password === hashedPassword) {
-                    localStorage.setItem('username', username);
-
-                    document.getElementById("is").style.display = 'none';
-                    document.getElementById("logoutButton").innerText = username;
-                    document.getElementById("logoutButton").style.display = 'inline-block';
-
-                    resolve('Inici de sessió exitós');
-                    closeForm();
-                } else {
-                    reject('Contrasenya incorrecte');
-                }
+                    if (result) {
+                        localStorage.setItem('username', username);
+                        document.getElementById("is").style.display = 'none';
+                        document.getElementById("logoutButton").innerText = username;
+                        document.getElementById("logoutButton").style.display = 'inline-block';
+                        resolve('Inicio de sesión exitoso');
+                        closeForm();
+                    } else {
+                        reject('Contraseña incorrecta');
+                    }
+                });
             } else {
                 reject('Usuari no registrat');
             }
         };
 
         request.onerror = (event) => {
-            reject('Error al verificar l\'usuari: ' + event.target.error);
+            reject('Error al verificar el usuario: ' + event.target.error);
         };
     });
 };
-
 
 function logout() {
     currentUser = null;
