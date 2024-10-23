@@ -557,9 +557,9 @@ function createEdit(tableId) {
     console.log(tableP);
     
     if (tableP) {
-        const container = document.getElementsByClassName('container1')[0];
+        const containers = document.getElementsByClassName('container1');
 
-        if (container) {
+        Array.from(containers).forEach(container => {
             container.addEventListener('click', function(event) {
                 var span, input, text;
 
@@ -602,6 +602,7 @@ function createEdit(tableId) {
                     });
                 }
             });
-        }
+        });
     }
 }
+
