@@ -554,18 +554,21 @@ function createSave(tableId, taskid) {
 
 function createEdit(tableId) {
     let tableC = tables.find(t => t.id === tableId);
+    let table = tableB.tasks.find(c => c.id === taskid);
+
     let nameTableA = document.getElementById("nameA").value;
     let tableNameA = document.getElementById("rit").value;
+    let selectedTableIda = parseInt(document.getElementById("tableSelect").value);
 
     table.name = nameTableA
     table.description = tableNameA
 
-    if (selectedTableId !== tableId) {
-        const newTable = tables.find(t => t.id === selectedTableId);
+    if (selectedTableIda !== tableId) {
+        const newTable = tables.find(t => t.id === selectedTableIda);
         if (newTable) {
-            tableB.tasks = tableB.tasks.filter(t => t.id !== taskid);
+            tableC.tasks = tableC.tasks.filter(t => t.id !== tableId);
 
-            newTable.tasks.push(taskB);
+            newTable.tasks.push(table);
         }
     }
 
