@@ -205,11 +205,11 @@ function renderTables() {
         dove.innerHTML = `
             
             <div class="container1 row">
-                <div class="col-sm-9">
+                <div class="col-sm-7">
                     <h3> <span>${tableA.name}</span> </h3>
                 </div>
                 <div class="col-sm-2">
-                    <button type="button" class="btn btn-primary" id="rit" onclick="createEdit(${index})">Editar</button>
+                    <button type="button" class="btn btn-primary" id="rit-${index}" onclick="createEdit(${index})">Editar</button>
                 </div>
             </div>
 
@@ -561,52 +561,46 @@ function createEdit(tableId) {
     console.log(tableP);
     
     if (tableP) {
-        const containers = document.getElementsByClassName('container1');
+        const container = document.querySelector(`#rit-${tableId}`).closest('.container1'); // Get the closest container to the clicked button
+        const span = container.querySelector('span');  // Get the span inside that specific container
+        
+        if (span && span.tagName.toUpperCase() === "SPAN") {
+            var input, text;
 
-        Array.from(containers).forEach(container => {
-            container.addEventListener('click', function(event) {
-                var span, input, text;
+            // Hide the span
+            span.style.display = "none";
 
-                // Get the clicked element
-                span = event.target;
+            // Get its text
+            text = span.innerHTML;
 
-                // If it's a span...
-                if (span && span.tagName.toUpperCase() === "SPAN") {
-                    // Hide it
-                    span.style.display = "none";
+            // Create an input
+            input = document.createElement("input");
+            input.type = "text";
+            input.value = text;
+            input.size = Math.max(text.length / 4 * 3, 4);
+            span.parentNode.insertBefore(input, span);
 
-                    // Get its text
-                    text = span.innerHTML;
+            // Focus on the input, hook blur to update
+            input.focus();
+            input.onblur = function() {
+                // Remove the input
+                span.parentNode.removeChild(input);
 
-                    // Create an input
-                    input = document.createElement("input");
-                    input.type = "text";
-                    input.value = text;
-                    input.size = Math.max(text.length / 4 * 3, 4);
-                    span.parentNode.insertBefore(input, span);
+                // Update the span
+                span.innerHTML = input.value === "" ? "&nbsp;" : input.value;
 
-                    // Focus it, hook blur to update
-                    input.focus();
-                    input.onblur = function() {
-                        // Remove the input
-                        span.parentNode.removeChild(input);
+                // Show the span again
+                span.style.display = "";
+            };
 
-                        // Update the span
-                        span.innerHTML = input.value === "" ? "&nbsp;" : input.value;
-
-                        // Show the span again
-                        span.style.display = "";
-                    };
-
-                    // Optional: remove input on Enter key press
-                    input.addEventListener('keydown', function(event) {
-                        if (event.key === 'Enter') {
-                            input.blur();
-                        }
-                    });
+            // Optional: remove input on Enter key press
+            input.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    input.blur();
                 }
             });
-        });
+        }
     }
 }
+
 
