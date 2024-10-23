@@ -1,3 +1,150 @@
+const TRELLO_API_KEY = '32d223eeb92fac193b1a18f4c9ce2852';
+const TRELLO_TOKEN = 'TOKEN_DE_API_AQUI';
+
+function obtenerListasDeTablero(tableroId) {
+    const url = `https://api.trello.com/1/boards/${tableroId}/lists?cards=open&key=${TRELLO_API_KEY}&token=${TRELLO_TOKEN}`;
+
+    fetch(url)
+    .then(response => response.json())
+    .then(data => {
+        console.log('Listas y tarjetas del tablero:', data);
+
+        // Convertir las listas de Trello en la estructura de tu app
+        const importedTables = data.map(lista => ({
+            id: tableIdCounter++, 
+            name: lista.name,
+            tasks: lista.cards.map(tarjeta => ({
+                id: taskIdCounter++, 
+                name: tarjeta.name,
+                description: tarjeta.desc || ''
+            }))
+        }));
+
+        // Guardar las tablas importadas en tu app
+        tables = tables.concat(importedTables); 
+        actualizarTablasUsuario(currentUser, tables)
+            .then(() => {
+                alert('Tablas importadas correctamente de Trello.');
+                renderTables();  // Mostrar las tablas en tu app
+            })
+            .catch(error => {
+                console.error('Error al actualizar las tablas:', error);
+                alert(error);
+            });
+    })
+    .catch(error => console.error('Error al obtener listas y tarjetas:', error));
+}
+
+function obtenerTablerosDeTrello() {
+    const url = `https://api.trello.com/1/members/me/boards?key=${TRELLO_API_KEY}&token=${TRELLO_TOKEN}`;
+
+    fetch(url)
+    .then(response => response.json())
+    .then(data => {
+        console.log('Tableros en Trello:', data);
+
+        // Llenar el selector con los tableros obtenidos
+        const tableroSelector = document.getElementById('tableroSelector');
+        tableroSelector.innerHTML = ''; // Limpiar el selector
+
+        data.forEach(tablero => {
+            const option = document.createElement('option');
+            option.value = tablero.id;
+            option.text = tablero.name;
+            tableroSelector.appendChild(option);
+        });
+
+        // Mostrar el modal de selección de tablero
+        const myModal = new bootstrap.Modal(document.getElementById('tableroModal'));
+        myModal.show();
+    })
+    .catch(error => console.error('Error al obtener tableros:', error));
+}
+
+
+
+document.getElementById('importarTableroBtn').addEventListener('click', () => {
+    obtenerTablerosDeTrello(); 
+});
+
+document.getElementById('exportButton').addEventListener('click', exportarTablasATrello);
+
+function exportarTablasATrello() {
+    const nombreTablero = prompt('Introduce el nombre del tablero que quieres crear en Trello:');
+    
+    if (nombreTablero) {
+        const urlCrearTablero = `https://api.trello.com/1/boards/?name=${nombreTablero}&key=${TRELLO_API_KEY}&token=${TRELLO_TOKEN}`;
+
+        // Crear un tablero en Trello
+        fetch(urlCrearTablero, { method: 'POST' })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Tablero creado en Trello:', data);
+            const tableroId = data.id;
+
+            // Después de crear el tablero, exportar las listas y tareas
+            exportarListasATrello(tableroId);
+        })
+        .catch(error => console.error('Error al crear el tablero en Trello:', error));
+    } else {
+        alert('Nombre del tablero no puede estar vacío.');
+    }
+}
+
+document.getElementById('confirmarImportarTableroBtn').addEventListener('click', () => {
+    const tableroId = document.getElementById('tableroSelector').value;
+    if (tableroId) {
+        obtenerListasDeTablero(tableroId);  // Importar las listas y tarjetas de Trello
+        const myModal = bootstrap.Modal.getInstance(document.getElementById('tableroModal'));  // Cerrar el modal
+        myModal.hide();
+    } else {
+        alert('Por favor, selecciona un tablero.');
+    }
+});
+
+
+
+
+function exportarListasATrello(tableroId) {
+    tables.forEach(tableA => {
+        const urlCrearLista = `https://api.trello.com/1/lists?name=${tableA.name}&idBoard=${tableroId}&key=${TRELLO_API_KEY}&token=${TRELLO_TOKEN}`;
+
+        // Crear cada lista en Trello
+        fetch(urlCrearLista, { method: 'POST' })
+        .then(response => response.json())
+        .then(lista => {
+            console.log(`Lista "${lista.name}" creada en Trello:`, lista);
+
+            // Después de crear la lista, exportar las tareas
+            exportarTareasATrello(lista.id, tableA.tasks);
+        })
+        .catch(error => console.error(`Error al crear la lista "${tableA.name}" en Trello:`, error));
+    });
+}
+
+function exportarTareasATrello(listaId, tasks) {
+    tasks.forEach(task => {
+        const urlCrearTarea = `https://api.trello.com/1/cards?idList=${listaId}&name=${task.name}&desc=${task.description}&key=${TRELLO_API_KEY}&token=${TRELLO_TOKEN}`;
+
+        // Crear cada tarjeta (tarea) en Trello
+        fetch(urlCrearTarea, { method: 'POST' })
+        .then(response => response.json())
+        .then(tarea => {
+            console.log(`Tarea "${tarea.name}" creada en Trello:`, tarea);
+        })
+        .catch(error => console.error(`Error al crear la tarea "${task.name}" en Trello:`, error));
+    });
+}
+
+
+document.getElementById('importButton').addEventListener('click', () => {
+    obtenerTablerosDeTrello(); // Primero obtenemos los tableros disponibles en Trello para importar
+    // Luego puedes llamar a obtenerListasDeTablero() con el ID del tablero seleccionado
+});
+
+document.getElementById('exportButton').addEventListener('click', exportarTablasATrello); // Exporta las tablas a Trello
+
+
 let currentUser = null;
 let tables = [];
 let tableIdCounter = 0;
