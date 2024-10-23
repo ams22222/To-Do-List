@@ -204,8 +204,8 @@ function renderTables() {
         dove.classList.add("col-md-4", "border", "p-3", "mb-4", "rounded");
         dove.innerHTML = `
             
-            <div>
-                <h3>${tableA.name}</h3>
+            <div class="container1">
+                <h3> <span>${tableA.name}</span> </h3>
                 <button type="button" class="btn btn-primary" id="rit" onclick="createEdit(${index})">Editar</button>
             </div>
 
@@ -553,36 +553,46 @@ function createSave(tableId, taskid) {
 }
 
 function createEdit(tableId) {
-    let tableC = tables.find(t => t.id === tableId);
-    let table = tableB.tasks.find(c => c.id === taskid);
+    const tableP = tables.find(t => t.id === tableId);
+    console.log(tableP);
+    if (tableP) {
+        document.getElementsByClassName('container1').onclick = function(event) {
+            var span, input, text;
 
-    let nameTableA = document.getElementById("nameA").value;
-    let tableNameA = document.getElementById("rit").value;
-    let selectedTableIda = parseInt(document.getElementById("tableSelect").value);
+            // Get the event (handle MS difference)
+            event = event || window.event;
 
-    table.name = nameTableA
-    table.description = tableNameA
+            // Get the root element of the event (handle MS difference)
+            span = event.target || event.srcElement;
 
-    if (selectedTableIda !== tableId) {
-        const newTable = tables.find(t => t.id === selectedTableIda);
-        if (newTable) {
-            tableC.tasks = tableC.tasks.filter(t => t.id !== tableId);
+            // If it's a span...
+            if (span && span.tagName.toUpperCase() === "SPAN") {
+                // Hide it
+                span.style.display = "none";
 
-            newTable.tasks.push(table);
-        }
-    }
+                // Get its text
+                text = span.innerHTML;
 
-    const modalElement = document.getElementById('myModal');
-    const modalInstance = bootstrap.Modal.getInstance(modalElement);
-    modalInstance.hide();
+                // Create an input
+                input = document.createElement("input");
+                input.type = "text";
+                input.value = text;
+                input.size = Math.max(text.length / 4 * 3, 4);
+                span.parentNode.insertBefore(input, span);
 
-    actualizarTablasUsuario(currentUser, tables)
-        .then(() => {
-            alert("Tasca modificada correctament");
-            renderTables();
-        })
-        .catch((error) => {
-            console.error(error);
-            alert(error);
-        });
-}
+                // Focus it, hook blur to undo
+                input.focus();
+                input.onblur = function() {
+                    // Remove the input
+                    span.parentNode.removeChild(input);
+
+                    // Update the span
+                    span.innerHTML = input.value == "" ? "&nbsp;" : input.value;
+
+                    // Show the span again
+                    span.style.display = "";
+                };
+            }
+         };
+    };
+};
