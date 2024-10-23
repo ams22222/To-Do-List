@@ -213,7 +213,15 @@ function renderTables() {
         dove.setAttribute("id", `div-${index}`);
         dove.classList.add("col-md-4", "border", "p-3", "mb-4", "rounded");
         dove.innerHTML = `
-            <h3 style="word-break: break-word;">${tableA.name}</h3>
+            
+            <div class="container1 row">
+                <div class="col-sm-7">
+                    <h3 style="word-break: break-word;"> <span>${tableA.name}</span> </h3>
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-primary" id="rit-${index}" onclick="createEdit(${index})">Editar</button>
+                </div>
+            </div>
 
             <div class="input-group mb-3">
                 <input type="text" class="form-control tascaB" placeholder="Tasca" id="nameB-${index}">
@@ -570,6 +578,55 @@ function createSave(tableId, taskid) {
             alert(error);
         });
 }
+
+function createEdit(tableId) {
+    const tableP = tables.find(t => t.id === tableId);
+    console.log(tableP);
+    
+    if (tableP) {
+        const container = document.querySelector(`#rit-${tableId}`).closest('.container1'); // Get the closest container to the clicked button
+        const span = container.querySelector('span');  // Get the span inside that specific container
+        
+        if (span && span.tagName.toUpperCase() === "SPAN") {
+            var input, text;
+
+            // Hide the span
+            span.style.display = "none";
+
+            // Get its text
+            text = span.innerHTML;
+
+            // Create an input
+            input = document.createElement("input");
+            input.type = "text";
+            input.value = text;
+            input.size = Math.max(text.length / 4 * 3, 4);
+            span.parentNode.insertBefore(input, span);
+
+            // Focus on the input, hook blur to update
+            input.focus();
+            input.onblur = function() {
+                // Remove the input
+                span.parentNode.removeChild(input);
+
+                // Update the span
+                span.innerHTML = input.value === "" ? "&nbsp;" : input.value;
+
+                // Show the span again
+                span.style.display = "";
+            };
+
+            // Optional: remove input on Enter key press
+            input.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    input.blur();
+                }
+            });
+        }
+    }
+}
+
+
 
 
 function exportarTablas() {
