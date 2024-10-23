@@ -1,4 +1,4 @@
-const TRELLO_API_KEY = '32d223eeb92fac193b1a18f4c9ce2852';
+const TRELLO_API_KEY = 'APIKEY';
 const TRELLO_TOKEN = 'TOKEN_DE_API_AQUI';
 
 function obtenerListasDeTablero(tableroId) {
