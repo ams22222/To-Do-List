@@ -204,9 +204,13 @@ function renderTables() {
         dove.classList.add("col-md-4", "border", "p-3", "mb-4", "rounded");
         dove.innerHTML = `
             
-            <div class="container1">
-                <h3> <span>${tableA.name}</span> </h3>
-                <button type="button" class="btn btn-primary" id="rit" onclick="createEdit(${index})">Editar</button>
+            <div class="container1 row">
+                <div class="col-sm-9">
+                    <h3> <span>${tableA.name}</span> </h3>
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-primary" id="rit" onclick="createEdit(${index})">Editar</button>
+                </div>
             </div>
 
             <div class="input-group mb-3">
