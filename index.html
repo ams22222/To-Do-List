@@ -80,23 +80,13 @@
     </div>
 
     <div class="container" style="text-align: center;">
-        <!-- Exportar tablas locales -->
-        <button class="btn btn-success" onclick="exportarTablas()">Exportar Tablas</button>
-    
-        <!-- Importar tablas locales desde archivo JSON -->
-        <button id="importButton" class="btn btn-danger">Importar Tablas Local</button>
-    
-        <!-- Botón para abrir el modal de selección de tablero de Trello -->
-        <button id="importarTableroBtn" class="btn btn-danger">Importar Tablas de Trello</button>
-    
-        <!-- Exportar tablas a Trello -->
-        <button id="exportButton" class="btn btn-primary">Exportar Tablas a Trello</button>
-    
-        <!-- Input oculto para cargar archivos JSON -->
+        <button class="btn btn-success" onclick="exportarTablas()">Exportar Taules Local</button>
+        <button id="importButton" class="btn btn-danger">Importar Taules Local</button>
+        <button id="importarTableroBtn" class="btn btn-danger">Importar Taulas de Trello</button>
+        <button id="exportButton" class="btn btn-primary">Exportar Taules a Trello</button>
         <input type="file" id="fileInput" accept=".json" style="display: none;">
     </div>
     
-    <!-- Modal para seleccionar un tablero -->
     <div class="modal fade" id="tableroModal" tabindex="-1" aria-labelledby="tableroModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -104,9 +94,7 @@
                     <h5 class="modal-title" id="tableroModalLabel">Selecciona un tablero para importar</h5>
                 </div>
                 <div class="modal-body">
-                    <select id="tableroSelector" class="form-select">
-                        <!-- Aquí se llenarán los tableros de Trello -->
-                    </select>
+                    <select id="tableroSelector" class="form-select">           </select>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>

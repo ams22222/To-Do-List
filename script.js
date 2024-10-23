@@ -9,7 +9,6 @@ function obtenerListasDeTablero(tableroId) {
     .then(data => {
         console.log('Listas y tarjetas del tablero:', data);
 
-        // Convertir las listas de Trello en la estructura de tu app
         const importedTables = data.map(lista => ({
             id: tableIdCounter++, 
             name: lista.name,
@@ -20,12 +19,11 @@ function obtenerListasDeTablero(tableroId) {
             }))
         }));
 
-        // Guardar las tablas importadas en tu app
         tables = tables.concat(importedTables); 
         actualizarTablasUsuario(currentUser, tables)
             .then(() => {
                 alert('Tablas importadas correctamente de Trello.');
-                renderTables();  // Mostrar las tablas en tu app
+                renderTables();
             })
             .catch(error => {
                 console.error('Error al actualizar las tablas:', error);
@@ -42,10 +40,8 @@ function obtenerTablerosDeTrello() {
     .then(response => response.json())
     .then(data => {
         console.log('Tableros en Trello:', data);
-
-        // Llenar el selector con los tableros obtenidos
         const tableroSelector = document.getElementById('tableroSelector');
-        tableroSelector.innerHTML = ''; // Limpiar el selector
+        tableroSelector.innerHTML = '';
 
         data.forEach(tablero => {
             const option = document.createElement('option');
@@ -54,7 +50,6 @@ function obtenerTablerosDeTrello() {
             tableroSelector.appendChild(option);
         });
 
-        // Mostrar el modal de selección de tablero
         const myModal = new bootstrap.Modal(document.getElementById('tableroModal'));
         myModal.show();
     })
@@ -75,14 +70,12 @@ function exportarTablasATrello() {
     if (nombreTablero) {
         const urlCrearTablero = `https://api.trello.com/1/boards/?name=${nombreTablero}&key=${TRELLO_API_KEY}&token=${TRELLO_TOKEN}`;
 
-        // Crear un tablero en Trello
         fetch(urlCrearTablero, { method: 'POST' })
         .then(response => response.json())
         .then(data => {
             console.log('Tablero creado en Trello:', data);
             const tableroId = data.id;
 
-            // Después de crear el tablero, exportar las listas y tareas
             exportarListasATrello(tableroId);
         })
         .catch(error => console.error('Error al crear el tablero en Trello:', error));
@@ -91,11 +84,12 @@ function exportarTablasATrello() {
     }
 }
 
+
 document.getElementById('confirmarImportarTableroBtn').addEventListener('click', () => {
     const tableroId = document.getElementById('tableroSelector').value;
     if (tableroId) {
-        obtenerListasDeTablero(tableroId);  // Importar las listas y tarjetas de Trello
-        const myModal = bootstrap.Modal.getInstance(document.getElementById('tableroModal'));  // Cerrar el modal
+        obtenerListasDeTablero(tableroId); 
+        const myModal = bootstrap.Modal.getInstance(document.getElementById('tableroModal'));
         myModal.hide();
     } else {
         alert('Por favor, selecciona un tablero.');
@@ -109,13 +103,11 @@ function exportarListasATrello(tableroId) {
     tables.forEach(tableA => {
         const urlCrearLista = `https://api.trello.com/1/lists?name=${tableA.name}&idBoard=${tableroId}&key=${TRELLO_API_KEY}&token=${TRELLO_TOKEN}`;
 
-        // Crear cada lista en Trello
         fetch(urlCrearLista, { method: 'POST' })
         .then(response => response.json())
         .then(lista => {
             console.log(`Lista "${lista.name}" creada en Trello:`, lista);
 
-            // Después de crear la lista, exportar las tareas
             exportarTareasATrello(lista.id, tableA.tasks);
         })
         .catch(error => console.error(`Error al crear la lista "${tableA.name}" en Trello:`, error));
@@ -126,7 +118,6 @@ function exportarTareasATrello(listaId, tasks) {
     tasks.forEach(task => {
         const urlCrearTarea = `https://api.trello.com/1/cards?idList=${listaId}&name=${task.name}&desc=${task.description}&key=${TRELLO_API_KEY}&token=${TRELLO_TOKEN}`;
 
-        // Crear cada tarjeta (tarea) en Trello
         fetch(urlCrearTarea, { method: 'POST' })
         .then(response => response.json())
         .then(tarea => {
@@ -138,8 +129,7 @@ function exportarTareasATrello(listaId, tasks) {
 
 
 document.getElementById('importButton').addEventListener('click', () => {
-    obtenerTablerosDeTrello(); // Primero obtenemos los tableros disponibles en Trello para importar
-    // Luego puedes llamar a obtenerListasDeTablero() con el ID del tablero seleccionado
+    obtenerTablerosDeTrello();
 });
 
 document.getElementById('exportButton').addEventListener('click', exportarTablasATrello); // Exporta las tablas a Trello
