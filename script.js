@@ -1,5 +1,5 @@
-const TRELLO_API_KEY = 'APIKEY';
-const TRELLO_TOKEN = 'TOKEN_DE_API_AQUI';
+const TRELLO_API_KEY = 'api';
+const TRELLO_TOKEN = 'token';
 
 function obtenerListasDeTablero(tableroId) {
     const url = `https://api.trello.com/1/boards/${tableroId}/lists?cards=open&key=${TRELLO_API_KEY}&token=${TRELLO_TOKEN}`;
@@ -18,6 +18,8 @@ function obtenerListasDeTablero(tableroId) {
                 description: tarjeta.desc || ''
             }))
         }));
+
+        tables = [];
 
         tables = tables.concat(importedTables); 
         actualizarTablasUsuario(currentUser, tables)
